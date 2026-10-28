@@ -1,0 +1,5 @@
+{
+  "URL": "https://openrouter.ai/api/v1/chat/completions",
+  "OPENROUTER_API_KEY": "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",
+  "MODEL_NAME": "nvidia/nemotron-3.5-lightning:free"
+}

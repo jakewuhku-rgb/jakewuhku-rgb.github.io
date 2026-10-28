@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ECIC Food - Premium Seafood & Seasonal Home Cooking Platform</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #F8F9FA;
+            color: #0B192C;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col pb-20 md:pb-0">
+
+    <!-- Top Announcement Bar -->
+    <div class="bg-[#0B192C] text-white text-xs md:text-sm py-2 px-4 text-center font-medium tracking-wide">
+        ⚡ Lightning Fast • <span class="text-[#FF6B6B] font-bold">2-Hour Same-Day Delivery</span> on Fresh Seafood & Seasonal Produce | Free Delivery over $400
+    </div>
+
+    <!-- Desktop & Mobile Header -->
+    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-gray-100 shadow-xs">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+            
+            <!-- Brand & Location -->
+            <div class="flex items-center gap-6">
+                <a href="#" class="flex items-center gap-2 group">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#0B192C] to-[#0A5C36] flex items-center justify-center text-white font-black text-xl shadow-md group-hover:scale-105 transition-transform">
+                        EC
+                    </div>
+                    <div>
+                        <span class="text-xl md:text-2xl font-extrabold tracking-tight text-[#0B192C]">ECIC Food</span>
+                        <span class="block text-[10px] uppercase tracking-widest text-[#0A5C36] font-bold">Fresh Home Cooking</span>
+                    </div>
+                </a>
+
+                <!-- Location Selector (Desktop) -->
+                <button onclick="openLocationModal()" class="hidden lg:flex items-center gap-1.5 text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded-full transition-colors cursor-pointer">
+                    <i data-lucide="map-pin" class="w-3.5 h-3.5 text-[#FF6B6B]"></i>
+                    <span id="currentLocationText">Deliver to: Hong Kong Island (Central)</span>
+                    <i data-lucide="chevron-down" class="w-3 h-3"></i>
+                </button>
+            </div>
+
+            <!-- Search Bar (Desktop) -->
+            <div class="hidden md:flex flex-1 max-w-md mx-4">
+                <div class="relative w-full">
+                    <input type="text" id="desktopSearchInput" placeholder="Search fresh sashimi, hairy crab, organic veggies..." oninput="handleSearch(this.value)" class="w-full bg-gray-100 text-sm rounded-full pl-10 pr-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#0A5C36] transition-all">
+                    <i data-lucide="search" class="absolute left-3.5 top-3 w-4 h-4 text-gray-400"></i>
+                </div>
+            </div>
+
+            <!-- Right Actions -->
+            <div class="flex items-center gap-3">
+                <a href="https://wa.me/85212345678" target="_blank" class="hidden sm:flex items-center gap-1.5 text-xs font-semibold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 px-3.5 py-2 rounded-full transition-colors">
+                    <i data-lucide="message-circle" class="w-4 h-4 text-emerald-600"></i>
+                    WhatsApp Support
+                </a>
+
+                <!-- Cart Button -->
+                <button onclick="toggleCartDrawer()" class="relative bg-[#0B192C] hover:bg-slate-800 text-white p-2.5 rounded-xl transition-all cursor-pointer flex items-center gap-2 shadow-sm">
+                    <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+                    <span class="hidden sm:inline text-xs font-bold">Cart</span>
+                    <span id="cartBadge" class="absolute -top-1.5 -right-1.5 bg-[#FF6B6B] text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-white shadow-xs">0</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Desktop Sub-Navbar (Navigation Tabs) -->
+        <div class="hidden md:block bg-gray-50 border-t border-gray-100 px-4 sm:px-6 lg:px-8">
+            <div class="max-w-7xl mx-auto flex items-center justify-between text-sm font-medium">
+                <div class="flex items-center space-x-8 py-2.5">
+                    <a href="#shop" class="text-[#0A5C36] font-bold border-b-2 border-[#0A5C36] pb-1">Shop Catalog</a>
+                    <a href="#ai-kitchen" onclick="scrollToAI()" class="text-emerald-700 font-bold flex items-center gap-1.5 hover:text-emerald-900 transition-colors">
+                        <i data-lucide="sparkles" class="w-4 h-4 text-amber-500 animate-pulse"></i>
+                        ECIC AI Kitchen <span class="bg-amber-100 text-amber-800 text-[10px] px-1.5 py-0.5 rounded-full font-extrabold">NEW</span>
+                    </a>
+                    <a href="#categories" class="text-gray-600 hover:text-[#0B192C] transition-colors">Seasonal Specials</a>
+                    <a href="#categories" class="text-gray-600 hover:text-[#0B192C] transition-colors">Premium Sashimi</a>
+                    <a href="#categories" class="text-gray-600 hover:text-[#0B192C] transition-colors">Live Seafood</a>
+                    <a href="#categories" class="text-gray-600 hover:text-[#0B192C] transition-colors">Hotpot & Sets</a>
+                </div>
+                <div class="text-xs text-gray-500 font-medium">
+                    🔥 Trending Today: <span class="text-[#FF6B6B] font-bold">Hokkaido Live Sea Urchin</span>, <span class="text-[#FF6B6B] font-bold">Japanese Scallops</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-1">
+
+        <!-- Hero Section -->
+        <section class="relative bg-gradient-to-b from-[#0B192C] to-slate-900 text-white overflow-hidden py-16 md:py-24">
+            <div class="absolute inset-0 opacity-20 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:16px_16px]"></div>
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+                    <div class="inline-flex items-center gap-2 bg-emerald-500/20 text-emerald-400 text-xs font-semibold px-3 py-1.5 rounded-full border border-emerald-500/30">
+                        <i data-lucide="sparkles" class="w-3.5 h-3.5 text-[#FF6B6B]"></i>
+                        Wet Market Pricing, Star-Quality Freshness. Cook Like a Pro at Home
+                    </div>
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-tight">
+                        Bring The Fish Market Home <br>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-[#FF6B6B]">Enjoy Gourmet Home Cooking</span>
+                    </h1>
+                    <p class="text-gray-300 text-base md:text-lg max-w-xl mx-auto lg:mx-0">
+                        ECIC Food handpicks global seafood and seasonal ingredients. Use our AI Kitchen to instantly get chef recipes and ingredients matched, delivered within 2 hours!
+                    </p>
+                    
+                    <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
+                        <a href="#shop" class="w-full sm:w-auto bg-[#FF6B6B] hover:bg-[#ff5252] text-white font-bold px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all text-center flex items-center justify-center gap-2">
+                            <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+                            Explore Fresh Catch
+                        </a>
+                        <a href="#ai-kitchen" onclick="scrollToAI()" class="w-full sm:w-auto bg-white/10 hover:bg-white/20 text-white font-bold px-8 py-4 rounded-xl border border-white/20 transition-all text-center flex items-center justify-center gap-2">
+                            <i data-lucide="wand-2" class="w-5 h-5 text-amber-400"></i>
+                            Try AI Recipe Assistant
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Hero Visual Card -->
+                <div class="lg:col-span-5">
+                    <div class="relative bg-gradient-to-br from-slate-800 to-slate-900 rounded-3xl p-6 border border-slate-700 shadow-2xl">
+                        <div class="absolute -top-3 -right-3 bg-[#FF6B6B] text-white text-xs font-black px-3 py-1 rounded-full shadow-md">
+                            Best Seller 🔥
+                        </div>
+                        <div class="rounded-2xl overflow-hidden mb-4 bg-slate-950 h-56 flex items-center justify-center relative">
+                            <img src="https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?auto=format&fit=crop&w=800&q=80" alt="Fresh Sashimi Set" class="w-full h-full object-cover opacity-90 hover:scale-105 transition-transform duration-500">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+                            <div class="absolute bottom-4 left-4 right-4 text-white">
+                                <span class="bg-emerald-600 text-[10px] font-bold px-2 py-0.5 rounded">Direct from Toyosu</span>
+                                <h3 class="font-bold text-lg mt-1">Premium Sashimi Assortment</h3>
+                            </div>
+                        </div>
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between text-sm">
+                                <span class="text-gray-400">Original: <del>$580</del></span>
+                                <span class="text-2xl font-black text-[#FF6B6B]">$428 <span class="text-xs text-gray-400 font-normal">/ approx. 400g</span></span>
+                            </div>
+                            <button onclick="addFeaturedToCart()" class="w-full bg-[#0A5C36] hover:bg-emerald-700 text-white font-bold py-3 rounded-xl transition-colors flex items-center justify-center gap-2 cursor-pointer shadow-md">
+                                <i data-lucide="plus" class="w-4 h-4"></i>
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Trust & Value Props (Icon Row) -->
+        <section class="bg-white border-b border-gray-100 py-8">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-2 md:grid-cols-4 gap-6">
+                <div class="flex items-center gap-4 p-4 rounded-2xl bg-gray-50 border border-gray-100">
+                    <div class="w-12 h-12 rounded-xl bg-amber-100 flex items-center justify-center text-amber-600 shrink-0">
+                        <i data-lucide="zap" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-sm text-[#0B192C]">2-Hour Flash Delivery</h4>
+                        <p class="text-xs text-gray-500">Fresh delivery to your door</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4 p-4 rounded-2xl bg-gray-50 border border-gray-100">
+                    <div class="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center text-blue-600 shrink-0">
+                        <i data-lucide="fish" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-sm text-[#0B192C]">Live & Selected Quality</h4>
+                        <p class="text-xs text-gray-500">Directly sourced fresh seafood</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4 p-4 rounded-2xl bg-gray-50 border border-gray-100">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-100 flex items-center justify-center text-emerald-600 shrink-0">
+                        <i data-lucide="badge-percent" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-sm text-[#0B192C]">Wet Market Pricing</h4>
+                        <p class="text-xs text-gray-500">Affordable direct-to-consumer</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4 p-4 rounded-2xl bg-gray-50 border border-gray-100">
+                    <div class="w-12 h-12 rounded-xl bg-purple-100 flex items-center justify-center text-purple-600 shrink-0">
+                        <i data-lucide="message-square" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-sm text-[#0B192C]">24/7 WhatsApp Support</h4>
+                        <p class="text-xs text-gray-500">Real-time assistance</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 🌟 ECIC AI Kitchen Section (Powered by OpenRouter API Pipeline) -->
+        <section id="ai-kitchen" class="py-16 bg-gradient-to-b from-gray-50 to-emerald-50/40 border-b border-gray-200">
+            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <div class="text-center space-y-3 mb-10">
+                    <div class="inline-flex items-center gap-1.5 bg-amber-100 text-amber-800 text-xs font-bold px-3 py-1 rounded-full">
+                        <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-600"></i>
+                        ECIC AI Kitchen Assistant
+                    </div>
+                    <h2 class="text-3xl md:text-4xl font-extrabold text-[#0B192C]">What Would You Like to Cook? Let AI Generate Recipes & Ingredients</h2>
+                    <p class="text-gray-600 text-sm md:text-base max-w-2xl mx-auto">
+                        Type any dish or meal you have in mind (e.g., Tomato Scrambled Eggs, Steamed Grouper, Garlic Scallops), and our AI will break down the cooking steps and match them with ECIC Food fresh ingredients!
+                    </p>
+                </div>
+
+                <div class="bg-white rounded-3xl p-6 md:p-8 shadow-xl border border-gray-200 space-y-6">
+                    
+                    <!-- Input & Action Bar -->
+                    <div class="flex flex-col sm:flex-row gap-3">
+                        <div class="relative flex-1">
+                            <input type="text" id="aiDishInput" placeholder="e.g., Tomato Scrambled Eggs, Steamed Seafood, Garlic Prawns..." value="Tomato Scrambled Eggs" class="w-full bg-gray-50 border border-gray-200 rounded-2xl px-4 py-3.5 text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-[#0A5C36] font-medium">
+                        </div>
+                        <button id="runBtn" class="bg-[#0A5C36] hover:bg-emerald-800 text-white font-bold px-8 py-3.5 rounded-2xl transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer shrink-0">
+                            <i data-lucide="wand-2" class="w-5 h-5 text-amber-300"></i>
+                            Generate AI Recipe
+                        </button>
+                    </div>
+
+                    <!-- Quick Dish Chips -->
+                    <div class="flex flex-wrap items-center gap-2 text-xs">
+                        <span class="text-gray-500 font-bold">Quick Ideas:</span>
+                        <button onclick="setAiInput('Tomato Scrambled Eggs')" class="bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded-lg text-gray-700 font-medium transition-colors">🍅 Tomato Scrambled Eggs</button>
+                        <button onclick="setAiInput('Steamed Fresh Grouper')" class="bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded-lg text-gray-700 font-medium transition-colors">🐟 Steamed Fresh Fish</button>
+                        <button onclick="setAiInput('Garlic Vermicelli Scallops')" class="bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded-lg text-gray-700 font-medium transition-colors">🦪 Garlic Scallops</button>
+                        <button onclick="setAiInput('Japanese Sashimi Rice Bowl')" class="bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded-lg text-gray-700 font-medium transition-colors">🍱 Sashimi Rice Bowl</button>
+                    </div>
+
+                    <!-- Pipeline Status Display -->
+                    <div id="status" class="text-xs font-mono text-emerald-700 bg-emerald-50 px-4 py-2.5 rounded-xl border border-emerald-200">
+                        Status: 🟢 Ready. Click the button above to start the API pipeline.
+                    </div>
+
+                    <!-- Output Result Area -->
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-sm font-bold text-[#0B192C] flex items-center gap-1.5">
+                                <i data-lucide="book-open" class="w-4 h-4 text-[#0A5C36]"></i>
+                                AI Recipe & Ingredient Analysis
+                            </h3>
+                            <button onclick="addAllIngredientsToCart()" class="text-xs bg-[#FF6B6B] hover:bg-[#ff5252] text-white font-bold px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1">
+                                <i data-lucide="shopping-bag" class="w-3.5 h-3.5"></i>
+                                Add All Ingredients to Cart
+                            </button>
+                        </div>
+                        <div id="output" class="w-full h-80 bg-slate-900 text-emerald-300 font-mono text-xs md:text-sm p-5 rounded-2xl overflow-y-auto whitespace-pre-wrap border border-slate-800 leading-relaxed shadow-inner">
+// System will load config.json and system_prompt.txt and invoke OpenRouter API to display AI generated results...
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Dynamic Categories Grid -->
+        <section id="categories" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between mb-8">
+                <div>
+                    <h2 class="text-2xl md:text-3xl font-black text-[#0B192C]">Explore Categories</h2>
+                    <p class="text-gray-500 text-sm mt-1">Handpicked global seafood and premium ingredients for your daily meals</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+                <div onclick="filterCategory('seasonal')" class="group relative rounded-2xl overflow-hidden h-48 cursor-pointer shadow-md hover:shadow-xl transition-all">
+                    <img src="https://images.unsplash.com/photo-1550989460-0adf9ea622e2?auto=format&fit=crop&w=600&q=80" alt="Seasonal" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-4 text-white">
+                        <span class="text-xs text-amber-300 font-bold">Limited</span>
+                        <h3 class="font-extrabold text-lg">Seasonal Specials</h3>
+                    </div>
+                </div>
+                <div onclick="filterCategory('sashimi')" class="group relative rounded-2xl overflow-hidden h-48 cursor-pointer shadow-md hover:shadow-xl transition-all">
+                    <img src="https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&w=600&q=80" alt="Sashimi" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-4 text-white">
+                        <span class="text-xs text-emerald-300 font-bold">Air-Fly Fresh</span>
+                        <h3 class="font-extrabold text-lg">Premium Sashimi</h3>
+                    </div>
+                </div>
+                <div onclick="filterCategory('seafood')" class="group relative rounded-2xl overflow-hidden h-48 cursor-pointer shadow-md hover:shadow-xl transition-all">
+                    <img src="https://images.unsplash.com/photo-1565680314216-59a827d1f6c9?auto=format&fit=crop&w=600&q=80" alt="Live Seafood" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-4 text-white">
+                        <span class="text-xs text-cyan-300 font-bold">Live Catch</span>
+                        <h3 class="font-extrabold text-lg">Live Seafood Sets</h3>
+                    </div>
+                </div>
+                <div onclick="filterCategory('hotpot')" class="group relative rounded-2xl overflow-hidden h-48 cursor-pointer shadow-md hover:shadow-xl transition-all">
+                    <img src="https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&w=600&q=80" alt="Hotpot" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-4 text-white">
+                        <span class="text-xs text-rose-300 font-bold">Warm & Cozy</span>
+                        <h3 class="font-extrabold text-lg">Hotpot & Poon Choi</h3>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Featured Products / Best Sellers (The "Add to Cart" Engine) -->
+        <section id="shop" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
+                <div>
+                    <h2 class="text-2xl md:text-3xl font-black text-[#0B192C]">Best Sellers</h2>
+                    <p class="text-gray-500 text-sm mt-1">Click to add directly and quickly prepare tonight's dinner ingredients</p>
+                </div>
+                <!-- Category Filter Pills -->
+                <div class="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0 hide-scrollbar">
+                    <button onclick="filterCategory('all')" id="btn-all" class="category-pill active-pill px-4 py-2 rounded-full text-xs font-bold bg-[#0B192C] text-white whitespace-nowrap transition-colors">All Products</button>
+                    <button onclick="filterCategory('seasonal')" id="btn-seasonal" class="category-pill px-4 py-2 rounded-full text-xs font-bold bg-gray-200 text-gray-700 whitespace-nowrap transition-colors">Seasonal</button>
+                    <button onclick="filterCategory('sashimi')" id="btn-sashimi" class="category-pill px-4 py-2 rounded-full text-xs font-bold bg-gray-200 text-gray-700 whitespace-nowrap transition-colors">Sashimi</button>
+                    <button onclick="filterCategory('seafood')" id="btn-seafood" class="category-pill px-4 py-2 rounded-full text-xs font-bold bg-gray-200 text-gray-700 whitespace-nowrap transition-colors">Live Seafood</button>
+                    <button onclick="filterCategory('hotpot')" id="btn-hotpot" class="category-pill px-4 py-2 rounded-full text-xs font-bold bg-gray-200 text-gray-700 whitespace-nowrap transition-colors">Hotpot</button>
+                </div>
+            </div>
+
+            <!-- Product Grid -->
+            <div id="productGrid" class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+                <!-- Dynamically rendered via JS -->
+            </div>
+        </section>
+
+        <!-- Social Proof & Customer Reviews -->
+        <section class="py-16 bg-white border-t border-gray-100">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8">
+                <div>
+                    <span class="text-xs font-extrabold text-[#0A5C36] tracking-widest uppercase bg-emerald-50 px-3 py-1 rounded-full">Customer Reviews</span>
+                    <h2 class="text-2xl md:text-3xl font-black text-[#0B192C] mt-2">Trusted by Thousands of Home Cooks</h2>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
+                    <div class="bg-gray-50 p-6 rounded-2xl border border-gray-100 shadow-xs space-y-4">
+                        <div class="flex items-center gap-1 text-amber-400">
+                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        </div>
+                        <p class="text-sm text-gray-700 font-medium">"The AI recipe feature is extremely useful! Type what you want to eat and it generates the grocery list instantly, plus adding seafood directly to cart and arriving in 2 hours is amazing!"</p>
+                        <div class="flex items-center gap-3 pt-2 border-t border-gray-200">
+                            <div class="w-9 h-9 rounded-full bg-emerald-700 text-white font-bold flex items-center justify-center text-xs">Mrs. Chan</div>
+                            <div>
+                                <h4 class="text-xs font-bold text-[#0B192C]">Mrs. Chan (Taikoo Shing)</h4>
+                                <span class="text-[10px] text-gray-500">Ordered 32 times</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-gray-50 p-6 rounded-2xl border border-gray-100 shadow-xs space-y-4">
+                        <div class="flex items-center gap-1 text-amber-400">
+                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        </div>
+                        <p class="text-sm text-gray-700 font-medium">"The sashimi platter freshness rivals high-end Japanese restaurants. The salmon and botan shrimp are exceptionally sweet and fresh, cheaper than wet markets!"</p>
+                        <div class="flex items-center gap-3 pt-2 border-t border-gray-200">
+                            <div class="w-9 h-9 rounded-full bg-blue-700 text-white font-bold flex items-center justify-center text-xs">Jason</div>
+                            <div>
+                                <h4 class="text-xs font-bold text-[#0B192C]">Jason Wong (Finance)</h4>
+                                <span class="text-[10px] text-gray-500">Ordered 18 times</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-gray-50 p-6 rounded-2xl border border-gray-100 shadow-xs space-y-4">
+                        <div class="flex items-center gap-1 text-amber-400">
+                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        </div>
+                        <p class="text-sm text-gray-700 font-medium">"Super punctual delivery with excellent insulation packaging. WhatsApp customer support replies very quickly. Highly recommended!"</p>
+                        <div class="flex items-center gap-3 pt-2 border-t border-gray-200">
+                            <div class="w-9 h-9 rounded-full bg-purple-700 text-white font-bold flex items-center justify-center text-xs">Ling</div>
+                            <div>
+                                <h4 class="text-xs font-bold text-[#0B192C]">Ms. Leung (Kowloon Station)</h4>
+                                <span class="text-[10px] text-gray-500">Ordered 25 times</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-[#0B192C] text-white pt-16 pb-24 md:pb-12 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
+            <div class="space-y-4">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-lg bg-[#0A5C36] flex items-center justify-center text-white font-black text-lg">EC</div>
+                    <span class="text-xl font-extrabold tracking-tight">ECIC Food</span>
+                </div>
+                <p class="text-gray-400 text-xs leading-relaxed">
+                    Hong Kong's premier online seafood and seasonal food delivery platform. Combining AI Kitchen intelligence with 2-hour cold-chain delivery for ultimate freshness.
+                </p>
+                <div class="flex items-center gap-3 pt-2">
+                    <a href="https://wa.me/85212345678" target="_blank" class="w-9 h-9 rounded-full bg-emerald-600/20 text-emerald-400 flex items-center justify-center hover:bg-emerald-600 hover:text-white transition-colors">
+                        <i data-lucide="message-circle" class="w-4 h-4"></i>
+                    </a>
+                    <a href="#" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors">
+                        <i data-lucide="facebook" class="w-4 h-4"></i>
+                    </a>
+                    <a href="#" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors">
+                        <i data-lucide="instagram" class="w-4 h-4"></i>
+                    </a>
+                </div>
+            </div>
+            <div>
+                <h4 class="font-bold text-sm mb-4 uppercase tracking-wider text-emerald-400">Quick Links</h4>
+                <ul class="space-y-2.5 text-xs text-gray-400">
+                    <li><a href="#shop" class="hover:text-white transition-colors">All Products</a></li>
+                    <li><a href="#ai-kitchen" onclick="scrollToAI()" class="hover:text-white transition-colors">ECIC AI Kitchen</a></li>
+                    <li><a href="#categories" class="hover:text-white transition-colors">Seasonal Hairy Crab</a></li>
+                    <li><a href="#shop" class="hover:text-white transition-colors">Direct Sashimi</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-bold text-sm mb-4 uppercase tracking-wider text-emerald-400">Customer Support</h4>
+                <ul class="space-y-2.5 text-xs text-gray-400">
+                    <li><a href="#" class="hover:text-white transition-colors">Delivery Areas & Schedule</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">Frequently Asked Questions</a></li>
+                    <li><a href="https://wa.me/85212345678" target="_blank" class="hover:text-white transition-colors">WhatsApp Support</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">Terms & Privacy Policy</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-bold text-sm mb-4 uppercase tracking-wider text-emerald-400">Payment Methods</h4>
+                <p class="text-xs text-gray-400 mb-3">Secure and convenient payment options:</p>
+                <div class="flex flex-wrap gap-2">
+                    <span class="bg-slate-800 text-gray-300 px-2.5 py-1 rounded text-xs font-bold">FPS</span>
+                    <span class="bg-slate-800 text-gray-300 px-2.5 py-1 rounded text-xs font-bold">PayMe</span>
+                    <span class="bg-slate-800 text-gray-300 px-2.5 py-1 rounded text-xs font-bold">Visa / Master</span>
+                    <span class="bg-slate-800 text-gray-300 px-2.5 py-1 rounded text-xs font-bold">Apple Pay</span>
+                </div>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 border-t border-slate-800/80 text-center text-xs text-gray-500">
+            &copy; 2026 ECIC Food Platform. All rights reserved. Built with QUIC (HTTP/3) High-Speed Architecture.
+        </div>
+    </footer>
+
+    <!-- Mobile Sticky Bottom Navigation Bar (5 Tabs) -->
+    <nav class="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-gray-200 py-2 px-4 flex items-center justify-around shadow-lg">
+        <a href="#shop" class="flex flex-col items-center text-[#0A5C36] font-bold">
+            <i data-lucide="home" class="w-5 h-5"></i>
+            <span class="text-[10px] mt-1">Home</span>
+        </a>
+        <a href="#categories" class="flex flex-col items-center text-gray-500 hover:text-[#0B192C]">
+            <i data-lucide="grid" class="w-5 h-5"></i>
+            <span class="text-[10px] mt-1">Categories</span>
+        </a>
+        <!-- AI Kitchen Tab -->
+        <a href="#ai-kitchen" onclick="scrollToAI()" class="flex flex-col items-center text-amber-600 font-extrabold relative">
+            <span class="absolute -top-2 -right-2 w-2 h-2 rounded-full bg-[#FF6B6B] animate-ping"></span>
+            <i data-lucide="sparkles" class="w-5 h-5"></i>
+            <span class="text-[10px] mt-1">AI Kitchen</span>
+        </a>
+        <button onclick="toggleCartDrawer()" class="flex flex-col items-center text-gray-500 hover:text-[#0B192C] relative">
+            <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+            <span class="text-[10px] mt-1">Cart</span>
+            <span id="mobileCartBadge" class="absolute -top-1 right-0 bg-[#FF6B6B] text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">0</span>
+        </button>
+        <button onclick="openLocationModal()" class="flex flex-col items-center text-gray-500 hover:text-[#0B192C]">
+            <i data-lucide="user" class="w-5 h-5"></i>
+            <span class="text-[10px] mt-1">Profile</span>
+        </button>
+    </nav>
+
+    <!-- Floating WhatsApp Assistant Button -->
+    <a href="https://wa.me/85212345678" target="_blank" class="fixed right-6 bottom-20 md:bottom-8 z-40 bg-emerald-600 hover:bg-emerald-700 text-white p-3.5 rounded-full shadow-2xl flex items-center gap-2 transition-transform hover:scale-110 cursor-pointer group">
+        <i data-lucide="message-circle" class="w-6 h-6"></i>
+        <span class="max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-300 ease-in-out whitespace-nowrap text-xs font-bold pr-1">
+            WhatsApp Support
+        </span>
+    </a>
+
+    <!-- Slide-over Cart Drawer -->
+    <div id="cartDrawer" class="fixed inset-0 z-50 overflow-hidden pointer-events-none opacity-0 transition-opacity duration-300">
+        <div class="absolute inset-0 bg-black/50 backdrop-blur-xs" onclick="toggleCartDrawer()"></div>
+        <div id="cartPanel" class="absolute inset-y-0 right-0 max-w-full flex pl-10 transform translate-x-full transition-transform duration-300 ease-in-out">
+            <div class="w-screen max-w-md bg-white shadow-2xl flex flex-col">
+                
+                <!-- Cart Header -->
+                <div class="p-6 border-b border-gray-100 flex items-center justify-between bg-gray-50">
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="shopping-bag" class="w-5 h-5 text-[#0A5C36]"></i>
+                        <h2 class="font-extrabold text-lg text-[#0B192C]">Your Shopping Cart</h2>
+                    </div>
+                    <button onclick="toggleCartDrawer()" class="p-2 text-gray-400 hover:text-gray-600 rounded-full">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
+                </div>
+
+                <!-- Free Shipping Progress -->
+                <div class="bg-emerald-50 px-6 py-3 border-b border-emerald-100 text-xs font-medium text-emerald-800 flex items-center justify-between">
+                    <span id="freeShippingText">Add $400 more for Free Delivery!</span>
+                    <i data-lucide="truck" class="w-4 h-4 text-emerald-600"></i>
+                </div>
+
+                <!-- Cart Items List -->
+                <div id="cartItemsContainer" class="flex-1 overflow-y-auto p-6 space-y-4 divide-y divide-gray-100">
+                    <!-- Populated by JS -->
+                </div>
+
+                <!-- Cart Footer / Checkout -->
+                <div class="p-6 border-t border-gray-100 bg-gray-50 space-y-4">
+                    <div class="space-y-1.5 text-sm">
+                        <div class="flex justify-between text-gray-600">
+                            <span>Subtotal</span>
+                            <span id="cartSubtotal" class="font-bold">$0.00</span>
+                        </div>
+                        <div class="flex justify-between text-gray-600">
+                            <span>Delivery Fee</span>
+                            <span id="cartShipping" class="font-bold">$40.00</span>
+                        </div>
+                        <div class="flex justify-between text-lg font-black text-[#0B192C] pt-2 border-t border-gray-200">
+                            <span>Total</span>
+                            <span id="cartTotal" class="text-[#FF6B6B]">$40.00</span>
+                        </div>
+                    </div>
+                    <button onclick="checkout()" class="w-full bg-[#FF6B6B] hover:bg-[#ff5252] text-white font-bold py-4 rounded-xl shadow-lg transition-colors flex items-center justify-center gap-2 cursor-pointer">
+                        <i data-lucide="credit-card" class="w-5 h-5"></i>
+                        Secure Checkout
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Location Modal -->
+    <div id="locationModal" class="fixed inset-0 z-50 flex items-center justify-center hidden">
+        <div class="absolute inset-0 bg-black/50 backdrop-blur-xs" onclick="openLocationModal()"></div>
+        <div class="bg-white rounded-3xl p-6 md:p-8 max-w-md w-full mx-4 relative z-10 shadow-2xl space-y-4">
+            <h3 class="text-xl font-black text-[#0B192C]">Select Delivery District</h3>
+            <p class="text-xs text-gray-500">ECIC Food provides cold-chain delivery across Hong Kong. Choose your region:</p>
+            <div class="space-y-2">
+                <button onclick="selectLocation('Hong Kong Island (Central / Wan Chai / Eastern)')" class="w-full text-left px-4 py-3 rounded-xl bg-gray-50 hover:bg-emerald-50 hover:text-emerald-800 font-bold text-sm transition-colors border border-gray-200">Hong Kong Island (Central / Wan Chai / Eastern)</button>
+                <button onclick="selectLocation('Kowloon (Yau Tsim Mong / Sham Shui Po / Kowloon City)')" class="w-full text-left px-4 py-3 rounded-xl bg-gray-50 hover:bg-emerald-50 hover:text-emerald-800 font-bold text-sm transition-colors border border-gray-200">Kowloon (Yau Tsim Mong / Sham Shui Po / Kowloon City)</button>
+                <button onclick="selectLocation('New Territories (Sha Tin / Tsuen Wan / Tseung Kwan O)')" class="w-full text-left px-4 py-3 rounded-xl bg-gray-50 hover:bg-emerald-50 hover:text-emerald-800 font-bold text-sm transition-colors border border-gray-200">New Territories (Sha Tin / Tsuen Wan / Tseung Kwan O)</button>
+            </div>
+            <button onclick="openLocationModal()" class="w-full bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-2.5 rounded-xl text-xs transition-colors">Close</button>
+        </div>
+    </div>
+
+    <!-- JavaScript Data & Logic -->
+    <script>
+        // Initialize Lucide Icons
+        document.addEventListener("DOMContentLoaded", () => {
+            lucide.createIcons();
+            renderProducts(products);
+            
+            // Attach AI Pipeline Listener
+            document.getElementById('runBtn').addEventListener('click', startApiPipeline);
+        });
+
+        // Product Catalog Data
+        const products = [
+            { id: 1, name: "Toyosu Direct Premium Salmon Sashimi", category: "sashimi", origin: "Norway / Japan", weight: "Approx. 300g", price: 168, originalPrice: 220, tag: "Hot", image: "https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?auto=format&fit=crop&w=600&q=80" },
+            { id: 2, name: "Taihu Premium Live Hairy Crab", category: "seasonal", origin: "Jiangsu, China", weight: "Approx. 200g/pc", price: 128, originalPrice: 168, tag: "Seasonal", image: "https://images.unsplash.com/photo-1550989460-0adf9ea622e2?auto=format&fit=crop&w=600&q=80" },
+            { id: 3, name: "Hokkaido Frozen Jumbo Scallops", category: "seafood", origin: "Hokkaido, Japan", weight: "Approx. 250g", price: 218, originalPrice: 280, tag: "20% OFF", image: "https://images.unsplash.com/photo-1565680314216-59a827d1f6c9?auto=format&fit=crop&w=600&q=80" },
+            { id: 4, name: "Live Tiger Grouper (Ideal for Steaming)", category: "seafood", origin: "Local Catch", weight: "Approx. 600g", price: 198, originalPrice: 240, tag: "Fresh", image: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=600&q=80" },
+            { id: 5, name: "Premium Botan Shrimp Sashimi Set", category: "sashimi", origin: "Hokkaido, Japan", weight: "6 pcs", price: 258, originalPrice: 320, tag: "Air-Fly", image: "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&w=600&q=80" },
+            { id: 6, name: "Handmade Premium Angus Beef Balls", category: "hotpot", origin: "Australia", weight: "Approx. 300g", price: 68, originalPrice: 88, tag: "Hotpot", image: "https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&w=600&q=80" },
+            { id: 7, name: "Live Sweet White Shrimp", category: "seafood", origin: "South China Sea", weight: "Approx. 500g", price: 108, originalPrice: 138, tag: "Value", image: "https://images.unsplash.com/photo-1565680314216-59a827d1f6c9?auto=format&fit=crop&w=600&q=80" },
+            { id: 8, name: "Live Littleneck Clams for Sake Stew", category: "hotpot", origin: "Vietnam / Local", weight: "Approx. 400g", price: 58, originalPrice: 75, tag: "Sweet", image: "https://images.unsplash.com/photo-1550989460-0adf9ea622e2?auto=format&fit=crop&w=600&q=80" }
+        ];
+
+        // Shopping Cart State
+        let cart = [];
+
+        // Render Product Cards
+        function renderProducts(itemsToRender) {
+            const grid = document.getElementById('productGrid');
+            if (itemsToRender.length === 0) {
+                grid.innerHTML = `<div class="col-span-full py-12 text-center text-gray-400">No products found matching your search.</div>`;
+                return;
+            }
+
+            grid.innerHTML = itemsToRender.map(p => {
+                const cartItem = cart.find(ci => ci.id === p.id);
+                const qty = cartItem ? cartItem.qty : 0;
+
+                return `
+                    <div class="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl transition-all flex flex-col justify-between group">
+                        <div>
+                            <div class="relative h-44 overflow-hidden bg-gray-100">
+                                <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                <span class="absolute top-2 left-2 bg-[#FF6B6B] text-white text-[10px] font-black px-2 py-0.5 rounded-full shadow-xs">${p.tag}</span>
+                            </div>
+                            <div class="p-4 space-y-1">
+                                <span class="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Origin: ${p.origin} | ${p.weight}</span>
+                                <h3 class="font-bold text-sm md:text-base text-[#0B192C] line-clamp-1">${p.name}</h3>
+                                <div class="flex items-baseline gap-2 pt-1">
+                                    <span class="text-lg font-black text-[#FF6B6B]">$${p.price}</span>
+                                    <del class="text-xs text-gray-400">$${p.originalPrice}</del>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-4 pt-0">
+                            ${qty === 0 ? `
+                                <button onclick="updateQuantity(${p.id}, 1)" class="w-full bg-[#0B192C] hover:bg-[#0A5C36] text-white text-xs font-bold py-2.5 rounded-xl transition-colors flex items-center justify-center gap-1.5 cursor-pointer shadow-xs">
+                                    <i data-lucide="plus" class="w-4 h-4"></i> Add to Cart
+                                </button>
+                            ` : `
+                                <div class="flex items-center justify-between bg-gray-100 rounded-xl p-1">
+                                    <button onclick="updateQuantity(${p.id}, -1)" class="w-8 h-8 bg-white hover:bg-gray-200 rounded-lg flex items-center justify-center text-gray-700 font-bold shadow-xs cursor-pointer">-</button>
+                                    <span class="text-xs font-black text-[#0B192C]">${qty}</span>
+                                    <button onclick="updateQuantity(${p.id}, 1)" class="w-8 h-8 bg-[#0A5C36] text-white hover:bg-emerald-700 rounded-lg flex items-center justify-center font-bold shadow-xs cursor-pointer">+</button>
+                                </div>
+                            `}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            lucide.createIcons();
+        }
+
+        // Filter Categories
+        function filterCategory(cat) {
+            document.querySelectorAll('.category-pill').forEach(btn => {
+                btn.classList.remove('bg-[#0B192C]', 'text-white');
+                btn.classList.add('bg-gray-200', 'text-gray-700');
+            });
+            const activeBtn = document.getElementById(`btn-${cat}`);
+            if(activeBtn) {
+                activeBtn.classList.remove('bg-gray-200', 'text-gray-700');
+                activeBtn.classList.add('bg-[#0B192C]', 'text-white');
+            }
+
+            if(cat === 'all') {
+                renderProducts(products);
+            } else {
+                const filtered = products.filter(p => p.category === cat);
+                renderProducts(filtered);
+            }
+        }
+
+        // Handle Search
+        function handleSearch(keyword) {
+            const term = keyword.toLowerCase().trim();
+            if(!term) {
+                renderProducts(products);
+                return;
+            }
+            const filtered = products.filter(p => p.name.toLowerCase().includes(term) || p.origin.toLowerCase().includes(term));
+            renderProducts(filtered);
+        }
+
+        // Cart Quantity Management
+        function updateQuantity(productId, delta) {
+            const product = products.find(p => p.id === productId);
+            if(!product) return;
+
+            let cartItem = cart.find(ci => ci.id === productId);
+            if(cartItem) {
+                cartItem.qty += delta;
+                if(cartItem.qty <= 0) {
+                    cart = cart.filter(ci => ci.id !== productId);
+                }
+            } else if(delta > 0) {
+                cart.push({ ...product, qty: 1 });
+            }
+
+            renderProducts(products);
+            updateCartUI();
+        }
+
+        function addFeaturedToCart() {
+            updateQuantity(1, 1);
+            toggleCartDrawer();
+        }
+
+        // Update Cart Drawer & Badges
+        function updateCartUI() {
+            const totalCount = cart.reduce((sum, item) => sum + item.qty, 0);
+            document.getElementById('cartBadge').textContent = totalCount;
+            document.getElementById('mobileCartBadge').textContent = totalCount;
+
+            const container = document.getElementById('cartItemsContainer');
+            if(cart.length === 0) {
+                container.innerHTML = `<div class="text-center py-12 text-gray-400 text-xs">Your shopping cart is empty. Start adding fresh seafood!</div>`;
+            } else {
+                container.innerHTML = cart.map(item => `
+                    <div class="py-3 flex items-center justify-between gap-3">
+                        <img src="${item.image}" alt="${item.name}" class="w-14 h-14 object-cover rounded-xl shrink-0">
+                        <div class="flex-1 min-w-0">
+                            <h4 class="font-bold text-xs text-[#0B192C] truncate">${item.name}</h4>
+                            <span class="text-xs text-[#FF6B6B] font-bold">$${item.price} x ${item.qty}</span>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <button onclick="updateQuantity(${item.id}, -1)" class="w-6 h-6 rounded bg-gray-100 font-bold text-xs flex items-center justify-center">-</button>
+                            <span class="text-xs font-bold w-4 text-center">${item.qty}</span>
+                            <button onclick="updateQuantity(${item.id}, 1)" class="w-6 h-6 rounded bg-gray-100 font-bold text-xs flex items-center justify-center">+</button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            const shipping = subtotal >= 400 || subtotal === 0 ? 0 : 40;
+            const total = subtotal + shipping;
+
+            document.getElementById('cartSubtotal').textContent = `$${subtotal.toFixed(2)}`;
+            document.getElementById('cartShipping').textContent = shipping === 0 ? '$0.00 (Free)' : '$40.00';
+            document.getElementById('cartTotal').textContent = `$${total.toFixed(2)}`;
+
+            const freeShippingDiff = 400 - subtotal;
+            const freeShippingText = document.getElementById('freeShippingText');
+            if(freeShippingDiff <= 0) {
+                freeShippingText.textContent = "🎉 You qualify for Free Delivery!";
+            } else {
+                freeShippingText.textContent = `Add $${freeShippingDiff} more for Free Delivery!`;
+            }
+        }
+
+        // Toggle Cart Drawer
+        function toggleCartDrawer() {
+            const drawer = document.getElementById('cartDrawer');
+            const panel = document.getElementById('cartPanel');
+            if(drawer.classList.contains('pointer-events-none')) {
+                drawer.classList.remove('pointer-events-none', 'opacity-0');
+                panel.classList.remove('translate-x-full');
+            } else {
+                drawer.classList.add('pointer-events-none', 'opacity-0');
+                panel.classList.add('translate-x-full');
+            }
+        }
+
+        // Location Modal
+        function openLocationModal() {
+            const modal = document.getElementById('locationModal');
+            modal.classList.toggle('hidden');
+        }
+
+        function selectLocation(locName) {
+            document.getElementById('currentLocationText').textContent = `Deliver to: ${locName}`;
+            openLocationModal();
+        }
+
+        function setAiInput(val) {
+            document.getElementById('aiDishInput').value = val;
+            scrollToAI();
+        }
+
+        function scrollToAI() {
+            document.getElementById('ai-kitchen').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function checkout() {
+            if(cart.length === 0) {
+                alert("Your shopping cart is empty!");
+                return;
+            }
+            alert("Redirecting to secure checkout (FPS / PayMe / Credit Card)... Thank you for shopping with ECIC Food!");
+        }
+
+        function addAllIngredientsToCart() {
+            updateQuantity(1, 1);
+            updateQuantity(3, 1);
+            updateQuantity(7, 1);
+            toggleCartDrawer();
+            alert("✅ Successfully added all recipe ingredients to your shopping cart!");
+        }
+
+        // 🌟 OpenRouter API Pipeline Integration (Supports dynamic config.json and system_prompt.txt referencing)
+        async function startApiPipeline() {
+            const statusDiv = document.getElementById('status');
+            const outputDiv = document.getElementById('output');
+            const runBtn = document.getElementById('runBtn');
+            const userInput = document.getElementById('aiDishInput').value || "Tomato Scrambled Eggs";
+
+            runBtn.disabled = true;
+            statusDiv.textContent = "Status: 📁 Loading config.json and system_prompt.txt...";
+            outputDiv.textContent = "";
+
+            try {
+                // 1. Parallel loading of config.json and system_prompt.txt
+                const [configResponse, promptResponse] = await Promise.all([
+                    fetch('./config.json'),
+                    fetch('./system_prompt.txt')
+                ]);
+
+                if (!configResponse.ok) throw new Error("Could not find or parse config.json file.");
+                const config = await configResponse.json();
+
+                let systemInstructionText = "";
+                if (promptResponse.ok) {
+                    systemInstructionText = (await promptResponse.text()).trim();
+                } else {
+                    console.warn("system_prompt.txt not resolved, using fallback baseline.");
+                }
+
+                // Check for secondary external file references defined in config.json
+                const externalFiles = config.external_files || {};
+                const fileKeys = Object.keys(externalFiles);
+                if (fileKeys.length > 0) {
+                    statusDiv.textContent = "Status: 📁 Loading external files referenced in config.json...";
+                    const extraPromises = fileKeys.map(k => fetch(externalFiles[k]).then(r => r.ok ? r.text() : "").catch(() => ""));
+                    const extraTexts = await Promise.all(extraPromises);
+                    extraTexts.forEach(txt => {
+                        if (txt.trim()) systemInstructionText += "\n\n" + txt.trim();
+                    });
+                }
+
+                const API_KEY = config.OPENROUTER_API_KEY;
+                const MODEL = config.MODEL_NAME;
+                const ENDPOINT_URL = config.URL;
+
+                statusDiv.textContent = `Status: 🌐 Dispatching request to ${MODEL}...`;
+
+                // 2. Assemble OpenRouter Message Array
+                const messages = [];
+                if (systemInstructionText) {
+                    messages.push({ "role": "system", "content": systemInstructionText });
+                }
+                messages.push({ "role": "user", "content": userInput });
+
+                // 3. Dispatch Core REST Request
+                const response = await fetch(ENDPOINT_URL, {
+                    method: "POST",
+                    headers: {
+                        "Authorization": `Bearer ${API_KEY}`,
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        model: MODEL,
+                        messages: messages,
+                        reasoning: { enabled: true }
+                    })
+                });
+
+                // 4. Handle Server Response Headers
+                if (!response.ok) {
+                    const errorJson = await response.json();
+                    throw new Error(`API returned Status ${response.status}: ${JSON.stringify(errorJson)}`);
+                }
+
+                const resultData = await response.json();
+                
+                // 5. Unpack OpenAI mapping schema
+                const assistantMessage = resultData.choices[0].message;
+                
+                statusDiv.textContent = "Status: 🎉 Recipe and ingredients generated successfully!";
+                outputDiv.textContent = assistantMessage.content || "Empty response body returned.";
+
+            } catch (error) {
+                statusDiv.textContent = "Status: ❌ Error occurred (Normal if real API key is not configured).";
+                outputDiv.textContent = `Error Details: ${error.message}\n\n[Tip] Please ensure valid config.json and system_prompt.txt files exist in the same directory, or click "Add All Ingredients to Cart" above to test the full ordering workflow.`;
+                console.error("Execution failed:", error);
+            } finally {
+                runBtn.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>
