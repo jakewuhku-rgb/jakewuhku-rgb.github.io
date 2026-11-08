@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Transport Layer Master Study Suite: Cheatsheet, Summary & Q&A</title>
+<!-- KaTeX for crisp and flawless math rendering -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+
+<style>
+  :root {
+    --primary: #0f2d59;
+    --primary-accent: #2563eb;
+    --secondary-accent: #0284c7;
+    --bg-page: #f8fafc;
+    --card-bg: #ffffff;
+    --border-color: #e2e8f0;
+    --text-main: #1e293b;
+    --text-muted: #475569;
+    --callout-bg: #eff6ff;
+    --callout-border: #3b82f6;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6;
+    color: var(--text-main);
+    background-color: var(--bg-page);
+    margin: 0;
+    padding: 0;
+  }
+
+  .nav-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(15, 45, 89, 0.96);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 12px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .nav-title {
+    color: #fff;
+    font-size: 17px;
+    font-weight: 700;
+    margin: 0;
+    letter-spacing: -0.3px;
+  }
+
+  .nav-tabs {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .tab-btn {
+    background: rgba(255, 255, 255, 0.12);
+    color: #e2e8f0;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 7px 16px;
+    border-radius: 20px;
+    font-size: 13.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .tab-btn:hover {
+    background: rgba(255, 255, 255, 0.25);
+    color: #ffffff;
+  }
+
+  .tab-btn.active {
+    background: #38bdf8;
+    color: #0f2d59;
+    border-color: #38bdf8;
+    font-weight: 700;
+  }
+
+  .container {
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 24px 16px;
+  }
+
+  .tab-pane {
+    display: none;
+  }
+
+  .tab-pane.active-pane {
+    display: block;
+    animation: fadeIn 0.25s ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero-banner {
+    background: linear-gradient(135deg, #0f2d59 0%, #1e40af 50%, #0284c7 100%);
+    color: white;
+    padding: 28px 32px;
+    border-radius: 14px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.08);
+  }
+
+  .hero-banner h1 {
+    margin: 0 0 8px 0;
+    font-size: clamp(1.4rem, 3vw, 1.85rem);
+    font-weight: 700;
+  }
+
+  .hero-banner p {
+    margin: 0;
+    opacity: 0.92;
+    font-size: 15px;
+  }
+
+  /* Responsive Grid for Cheatsheet */
+  .grid-cheatsheet {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 540px), 1fr));
+    gap: 20px;
+  }
+
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 22px 24px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    overflow: hidden;
+  }
+
+  .card-full {
+    grid-column: 1 / -1;
+  }
+
+  .card h2, .section h2 {
+    margin-top: 0;
+    margin-bottom: 14px;
+    font-size: 19px;
+    color: var(--primary);
+    border-bottom: 2px solid #e0f2fe;
+    padding-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .section h3 {
+    color: #1e40af;
+    font-size: 16.5px;
+    margin-top: 20px;
+    margin-bottom: 8px;
+  }
+
+  .formula-box {
+    background: #f0fdf4;
+    border-left: 4px solid #16a34a;
+    padding: 10px 14px;
+    border-radius: 6px;
+    margin: 12px 0;
+    font-size: 14px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .formula-box.blue {
+    background: #f0f9ff;
+    border-left-color: #0284c7;
+  }
+
+  .formula-box.amber {
+    background: #fffbeb;
+    border-left-color: #d97706;
+  }
+
+  .note-box {
+    background: var(--callout-bg);
+    border-left: 4px solid var(--callout-border);
+    padding: 12px 14px;
+    border-radius: 6px;
+    margin: 12px 0;
+    font-size: 14px;
+  }
+
+  .table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin: 12px 0;
+    border-radius: 6px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+    min-width: 480px;
+  }
+
+  th, td {
+    padding: 9px 12px;
+    text-align: left;
+    border: 1px solid var(--border-color);
+  }
+
+  th {
+    background-color: #f1f5f9;
+    font-weight: 600;
+    color: #334155;
+  }
+
+  tr:nth-child(even) {
+    background-color: #f8fafc;
+  }
+
+  ul, ol {
+    margin: 8px 0;
+    padding-left: 20px;
+    font-size: 14.5px;
+  }
+
+  li {
+    margin-bottom: 6px;
+  }
+
+  code {
+    background: #f1f5f9;
+    padding: 2px 5px;
+    border-radius: 4px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 13px;
+    color: #0f172a;
+    word-break: break-word;
+  }
+
+  /* Q&A Cards */
+  .qa-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    margin-bottom: 18px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  }
+
+  .qa-header {
+    padding: 16px 20px;
+    background: #ffffff;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .qa-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+    flex-wrap: wrap;
+  }
+
+  .badge {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.5px;
+  }
+
+  .badge-explicit { background: #e0f2fe; color: #0369a1; }
+  .badge-inferred { background: #ede9fe; color: #7c3aed; }
+  .badge-slide { background: #f1f5f9; color: var(--text-muted); }
+
+  .question-text {
+    font-size: 16px;
+    font-weight: 600;
+    color: #0f172a;
+    margin: 0;
+  }
+
+  .qa-body {
+    padding: 18px 20px;
+    background: #f8fafc;
+    font-size: 14.5px;
+  }
+
+  .qa-body p:first-child { margin-top: 0; }
+  .qa-body p:last-child { margin-bottom: 0; }
+
+  .key-takeaway {
+    background: #f0fdf4;
+    border-left: 3px solid #16a34a;
+    padding: 8px 12px;
+    margin-top: 10px;
+    font-size: 13.5px;
+    border-radius: 0 4px 4px 0;
+  }
+
+  .key-takeaway strong { color: #15803d; }
+
+  @media (max-width: 768px) {
+    .nav-header { padding: 10px 14px; }
+    .container { padding: 14px 10px; }
+    .card, .section { padding: 16px 14px; }
+    .hero-banner { padding: 20px 16px; }
+    .qa-header, .qa-body { padding: 14px 14px; }
+  }
+
+  @media print {
+    .nav-header { display: none; }
+    .tab-pane { display: block !important; margin-bottom: 40px; page-break-after: always; }
+    body { background: #fff; color: #000; padding: 0; }
+    .card, .qa-card, .section { box-shadow: none; border: 1px solid #ccc; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Sticky Responsive Navigation -->
+<nav class="nav-header">
+  <h2 class="nav-title">Transport Layer Study Suite</h2>
+  <div class="nav-tabs">
+    <button class="tab-btn active" onclick="switchTab('cheatsheet', this)">📑 Cheatsheet</button>
+    <button class="tab-btn" onclick="switchTab('summary', this)">📖 Detailed Summary</button>
+    <button class="tab-btn" onclick="switchTab('qna', this)">❓ Q&A Bank (31)</button>
+  </div>
+</nav>
+
+<div class="container">
+
+  <!-- ==================== TAB 1: CHEATSHEET ==================== -->
+  <div id="tab-cheatsheet" class="tab-pane active-pane">
+    <div class="hero-banner">
+      <h1>Transport Layer: Exam Fast-Review Cheatsheet</h1>
+      <p>High-yield synthesis of core concepts, mathematical models, comparison tables, and state diagrams.</p>
+    </div>
+
+    <div class="grid-cheatsheet">
+
+      <!-- Cheatsheet Card 1 -->
+      <div class="card">
+        <h2>1. Transport Core & Demultiplexing</h2>
+        <ul>
+          <li><strong>Boundary:</strong> Network layer delivers between <em>hosts</em> (IP). Transport layer delivers between <em>processes</em> (ports).</li>
+          <li><strong>UDP Demux (2-Tuple):</strong> <code>(Dest IP, Dest Port)</code>. All datagrams with identical destination IP/port route to the same socket.</li>
+          <li><strong>TCP Demux (4-Tuple):</strong> <code>(Source IP, Source Port, Dest IP, Dest Port)</code>. Multi-client servers spawn dedicated sockets per unique 4-tuple.</li>
+          <li><strong>Stack Protocol IDs:</strong> IP Header Protocol ID: <code>6</code> (TCP), <code>17</code> (UDP), <code>33</code> (DCCP), <code>132</code> (SCTP).</li>
+        </ul>
+      </div>
+
+      <!-- Cheatsheet Card 2 -->
+      <div class="card">
+        <h2>2. UDP vs. TCP Quick Matrix</h2>
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>Feature</th>
+                <th>UDP (RFC 768)</th>
+                <th>TCP (RFC 793, 9293)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Connection</strong></td>
+                <td>Connectionless (0 RTT)</td>
+                <td>3-Way Handshake (1 RTT)</td>
+              </tr>
+              <tr>
+                <td><strong>Reliability</strong></td>
+                <td>Unreliable, unordered</td>
+                <td>Reliable, ordered byte-stream</td>
+              </tr>
+              <tr>
+                <td><strong>Header Size</strong></td>
+                <td>Fixed 8 bytes</td>
+                <td>20 &ndash; 60 bytes</td>
+              </tr>
+              <tr>
+                <td><strong>Flow/Congestion</strong></td>
+                <td>None (uncontrolled)</td>
+                <td>rwnd (Flow) &amp; cwnd (Congestion)</td>
+              </tr>
+              <tr>
+                <td><strong>Primary Uses</strong></td>
+                <td>DNS, VoIP, QUIC</td>
+                <td>Web, SSH, Email, FTP</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <ul>
+          <li><strong>UDP Header:</strong> Source Port (16b), Dest Port (16b), Length (16b), Checksum (16b).</li>
+          <li><strong>Checksum:</strong> 1's complement sum of 16-bit words across header, data, and IP pseudo-header. Sum of all received words + checksum must equal all 1s (<code>0xFFFF</code>).</li>
+        </ul>
+      </div>
+
+      <!-- Cheatsheet Card 3 -->
+      <div class="card">
+        <h2>3. RDT & Pipelining Math</h2>
+        <div class="formula-box">
+          <strong>Stop-and-Wait Utilization:</strong>
+          $$U_{	ext{sender}} = rac{L / R}{RTT + (L / R)}$$
+        </div>
+        <div class="formula-box blue">
+          <strong>Pipelined Utilization ($N$ packets in flight):</strong>
+          $$U_{	ext{sender}} = rac{N \cdot (L / R)}{RTT + (L / R)}$$
+        </div>
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>Mechanism</th>
+                <th>Go-Back-N (GBN)</th>
+                <th>Selective Repeat (SR)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>ACK Type</strong></td>
+                <td>Cumulative ACK up to $n$</td>
+                <td>Individual ACK per packet</td>
+              </tr>
+              <tr>
+                <td><strong>Timers</strong></td>
+                <td>1 timer (oldest unACKed)</td>
+                <td>1 timer per unACKed packet</td>
+              </tr>
+              <tr>
+                <td><strong>Timeout</strong></td>
+                <td>Retransmits entire window</td>
+                <td>Retransmits timed-out packet only</td>
+              </tr>
+              <tr>
+                <td><strong>Receiver</strong></td>
+                <td>Discards out-of-order</td>
+                <td>Buffers out-of-order in window</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Cheatsheet Card 4 -->
+      <div class="card">
+        <h2>4. TCP Timers, MTU & MSS</h2>
+        <ul>
+          <li><strong>MSS & MTU:</strong> $	ext{MSS} = 	ext{MTU} - (	ext{IP Header [20B]} + 	ext{TCP Header [20B]})$. Ethernet MTU = 1500B $ightarrow$ MSS = 1460B. Min MTU = 576B $ightarrow$ MSS = 536B.</li>
+          <li><strong>Karn's Algorithm:</strong> Do not compute SampleRTT on retransmitted segments (ACK ambiguity).</li>
+        </ul>
+        <div class="formula-box amber">
+          <strong>Estimated RTT (EWMA, $lpha = 0.125$):</strong>
+          $$	ext{EstimatedRTT} = (1 - lpha) \cdot 	ext{EstimatedRTT} + lpha \cdot 	ext{SampleRTT}$$
+          <strong>Deviation RTT ($eta = 0.25$):</strong>
+          $$	ext{DevRTT} = (1 - eta) \cdot 	ext{DevRTT} + eta \cdot |	ext{SampleRTT} - 	ext{EstimatedRTT}|$$
+          <strong>Timeout Interval:</strong>
+          $$	ext{TimeoutInterval} = 	ext{EstimatedRTT} + 4 \cdot 	ext{DevRTT}$$
+        </div>
+      </div>
+
+      <!-- Cheatsheet Card 5 -->
+      <div class="card">
+        <h2>5. Flow Control & State Machines</h2>
+        <ul>
+          <li><strong>Flow Control:</strong> Protects receiver socket buffer from overflow:
+            $$	ext{LastByteSent} - 	ext{LastByteAcked} \le 	ext{rwnd}$$
+            $$	ext{rwnd} = 	ext{RcvBuffer} - [	ext{LastByteRcvd} - 	ext{LastByteRead}]$$
+          </li>
+          <li><strong>3-Way Handshake:</strong>
+            <ol>
+              <li><code>Client &rarr; Server:</code> SYN=1, Seq=$x$</li>
+              <li><code>Server &rarr; Client:</code> SYN=1, ACK=1, Seq=$y$, Ack=$x+1$</li>
+              <li><code>Client &rarr; Server:</code> ACK=1, Seq=$x+1$, Ack=$y+1$ (can send data)</li>
+            </ol>
+          </li>
+          <li><strong>4-Way Teardown & TIME_WAIT:</strong> Client sends FIN $ightarrow$ Server ACKs (<code>FIN_WAIT_2</code>) $ightarrow$ Server sends FIN $ightarrow$ Client ACKs and waits $2 	imes 	ext{MSL}$ in <code>TIME_WAIT</code> before <code>CLOSED</code>.</li>
+        </ul>
+      </div>
+
+      <!-- Cheatsheet Card 6 -->
+      <div class="card">
+        <h2>6. Congestion Control (Tahoe, Reno, CUBIC)</h2>
+        <div class="formula-box">
+          <strong>Sending Rate Limit:</strong>
+          $$	ext{Rate} pprox rac{	ext{cwnd}}{	ext{RTT}} 	ext{ B/s}, \quad 	ext{In-Flight} \le \min(	ext{cwnd}, 	ext{rwnd})$$
+        </div>
+        <ul>
+          <li><strong>Slow Start (SS):</strong> Starts at $	ext{cwnd} = 1	ext{ MSS}$. Doubles every RTT ($+1	ext{ MSS}$ per ACK) until $	ext{cwnd} \ge 	ext{ssthresh}$.</li>
+          <li><strong>Congestion Avoidance (CA):</strong> Linear probing ($+1	ext{ MSS}$ per RTT).</li>
+          <li><strong>Fast Retransmit:</strong> 3 Duplicate ACKs (4 identical total) triggers instant retransmit without waiting for timeout.</li>
+          <li><strong>Loss Events:</strong>
+            <ul>
+              <li><em>Timeout:</em> $	ext{ssthresh} = 	ext{cwnd}/2$, $	ext{cwnd} = 1	ext{ MSS}$, enter Slow Start.</li>
+              <li><em>3 Dup ACKs (Tahoe):</em> Drops to $	ext{cwnd} = 1	ext{ MSS}$ (Slow Start).</li>
+              <li><em>3 Dup ACKs (Reno):</em> $	ext{ssthresh} = 	ext{cwnd}/2$, $	ext{cwnd} = 	ext{ssthresh} + 3	ext{ MSS}$ (Fast Recovery). On fresh ACK $ightarrow 	ext{cwnd} = 	ext{ssthresh}$, enter CA.</li>
+            </ul>
+          </li>
+          <li><strong>TCP CUBIC:</strong> Uses cubic function centered at time $K$ ($W_{\max}$). Ramps quickly after drop, flattens near peak, probes aggressively beyond.</li>
+          <li><strong>BBR (Google):</strong> Delay-based. Keeps pipe full without buffering or causing bufferbloat by tracking bottleneck bandwidth and min RTT.</li>
+        </ul>
+      </div>
+
+      <!-- Cheatsheet Card 7 (Full width) -->
+      <div class="card card-full">
+        <h2>7. Transport Evolution & QUIC (HTTP/3)</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 16px;">
+          <div>
+            <h4 style="margin: 4px 0 8px 0; color: #1e3a8a;">Middlebox Bypassing</h4>
+            <p style="font-size: 13.5px; margin: 0;">SCTP/DCCP failed because firewalls/NATs drop unrecognized protocol IDs. QUIC encapsulates inside <strong>UDP port 443</strong> in user space, avoiding middlebox ossification.</p>
+          </div>
+          <div>
+            <h4 style="margin: 4px 0 8px 0; color: #1e3a8a;">1-RTT / 0-RTT Setup</h4>
+            <p style="font-size: 13.5px; margin: 0;">TCP + TLS requires 2&ndash;3 serial round trips. QUIC merges transport connection parameters and TLS 1.3 crypto handshake into a single 1-RTT exchange (0-RTT on resumption).</p>
+          </div>
+          <div>
+            <h4 style="margin: 4px 0 8px 0; color: #1e3a8a;">No HoL Blocking</h4>
+            <p style="font-size: 13.5px; margin: 0;">In HTTP/2 over TCP, dropping a packet in Stream 1 stalls all multiplexed streams. QUIC tracks stream sequence offsets independently so loss in Stream 1 never blocks Streams 2 and 3.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== TAB 2: DETAILED SUMMARY ==================== -->
+  <div id="tab-summary" class="tab-pane">
+    <div class="hero-banner">
+      <h1>Transport Layer: Comprehensive Course Summary</h1>
+      <p>Exhaustive sequential review across all lecture sections: theory, architectures, RFC mechanics, and derivations.</p>
+    </div>
+
+    <!-- Summary Section 1 -->
+    <div class="card" style="margin-bottom: 22px;">
+      <h2>1. Transport Layer Services & Architecture</h2>
+      <p>The transport layer establishes <strong>logical communication between application processes</strong> running on different hosts, abstracting away the complex multi-hop network mesh underneath.</p>
+      
+      <h3>1.1 Transport vs. Network Layer (Core Demarcation)</h3>
+      <ul>
+        <li><strong>Network Layer:</strong> Logical communication between <em>hosts</em> (addressed by IP addresses).</li>
+        <li><strong>Transport Layer:</strong> Logical communication between <em>processes</em> (identified by port numbers). Enhances best-effort network services with process-to-process multiplexing and optional reliability.</li>
+        <li><strong>The Household Analogy:</strong>
+          <ul>
+            <li><em>Hosts:</em> Houses (Ann's house and Bill's house).</li>
+            <li><em>Processes:</em> 12 kids in each house.</li>
+            <li><em>Messages:</em> Letters in envelopes.</li>
+            <li><em>Transport Protocol:</em> Ann and Bill collecting and distributing mail to kids.</li>
+            <li><em>Network Protocol:</em> Postal service delivering mail between houses.</li>
+          </ul>
+        </li>
+      </ul>
+
+      <h3>1.2 Protocol Ecosystem & Middlebox Problem</h3>
+      <ul>
+        <li><strong>TCP (RFC 793, RFC 9293):</strong> Connection-oriented, in-order reliable byte stream, flow control, congestion control.</li>
+        <li><strong>UDP (RFC 768):</strong> Bare-bones, connectionless, unordered, best-effort datagram service.</li>
+        <li><strong>SCTP & DCCP:</strong> Deployment failed across the global Internet due to <em>middlebox ossification</em> (firewalls drop unrecognized Layer 4 protocols).</li>
+        <li><strong>Missing Guarantees:</strong> Standard IP transport protocols offer <em>no delay/latency guarantees</em> and <em>no minimum throughput guarantees</em>.</li>
+      </ul>
+    </div>
+
+    <!-- Summary Section 2 -->
+    <div class="card" style="margin-bottom: 22px;">
+      <h2>2. Multiplexing & Demultiplexing Mechanics</h2>
+      <ul>
+        <li><strong>Multiplexing (Sender):</strong> Gathers data from application sockets, appends transport headers (ports), and passes segments down to the network layer.</li>
+        <li><strong>Demultiplexing (Receiver):</strong> Inspects header fields to deliver segment payloads to the matching process socket.</li>
+      </ul>
+
+      <h3>2.1 Comparison: UDP vs. TCP Sockets</h3>
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>Protocol</th>
+              <th>Socket Identifier Tuple</th>
+              <th>Demultiplexing Policy</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>UDP</strong></td>
+              <td><strong>2-Tuple:</strong> <code>(Dest IP, Dest Port)</code></td>
+              <td>All arriving segments with the target destination IP and port are dumped into the same socket. Source IP and port serve only as return addresses.</td>
+            </tr>
+            <tr>
+              <td><strong>TCP</strong></td>
+              <td><strong>4-Tuple:</strong> <code>(Source IP, Source Port, Dest IP, Dest Port)</code></td>
+              <td>The welcoming socket on port 80 listens for connections; each accepted client connection is instantiated into a dedicated socket tied to the full 4-tuple.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>2.2 Demux Across Stack Protocol IDs</h3>
+      <ul>
+        <li>Link Layer Frame Header &rarr; IP Protocol ID (e.g., Ethernet Frame Type).</li>
+        <li>IP Header &rarr; Transport Layer: <code>6</code> for TCP, <code>17</code> for UDP, <code>33</code> for DCCP, <code>132</code> for SCTP.</li>
+        <li>Transport Header &rarr; Application Socket via 16-bit Port Numbers.</li>
+      </ul>
+    </div>
+
+    <!-- Summary Section 3 -->
+    <div class="card" style="margin-bottom: 22px;">
+      <h2>3. Connectionless Transport: UDP (RFC 768)</h2>
+      <p>A lightweight protocol adding only port multiplexing and basic error checking to IP.</p>
+      <ul>
+        <li><strong>Design Benefits:</strong> Zero handshake delay (0 RTT), no endpoint connection state (highly scalable for servers), tiny 8-byte header, unthrottled transmission rate.</li>
+        <li><strong>Use Cases:</strong> Real-time streaming/VoIP (loss-tolerant, rate-sensitive), DNS queries, SNMP, and HTTP/3 via QUIC.</li>
+      </ul>
+
+      <h3>3.1 UDP Segment Header (8 Bytes)</h3>
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>Bits 0 &ndash; 15</th>
+              <th>Bits 16 &ndash; 31</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Source Port #</strong> (16 bits)</td>
+              <td><strong>Destination Port #</strong> (16 bits)</td>
+            </tr>
+            <tr>
+              <td><strong>Length</strong> (16 bits, segment bytes including header)</td>
+              <td><strong>Checksum</strong> (16 bits)</td>
+            </tr>
+            <tr>
+              <td colspan="2" style="text-align: center; padding: 14px;"><strong>Application Data (Payload)</strong></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>3.2 One's Complement Checksum</h3>
+      <div class="note-box">
+        <strong>Calculation:</strong> Sender treats all 16-bit words (header, data, IP pseudo-header) as integers and computes their sum with end-around carry. Inverts bits to store checksum. Receiver adds all words including checksum; result must be all 1s (<code>0xFFFF</code>) or error detected.
+      </div>
+    </div>
+
+    <!-- Summary Section 4 -->
+    <div class="card" style="margin-bottom: 22px;">
+      <h2>4. Principles of Reliable Data Transfer (RDT)</h2>
+      <h3>4.1 Stop-and-Wait & Utilization Bottleneck</h3>
+      <div class="formula-box">
+        $$D_{	ext{trans}} = rac{L}{R}, \quad U_{	ext{sender}} = rac{L / R}{RTT + (L / R)}$$
+        <em>Slide Example:</em> 1 Gbps link, 15 ms propagation delay (RTT = 30 ms), 8,000-bit packet:
+        $$D_{	ext{trans}} = rac{8000}{10^9} = 0.008	ext{ ms} \implies U_{	ext{sender}} = rac{0.008}{30.008} pprox 0.00027 \; (0.027\%)$$
+      </div>
+
+      <h3>4.2 Pipelined Protocols (GBN vs. SR)</h3>
+      <p>Pipelining keeps multiple packets in flight simultaneously: $U_{	ext{sender}} = rac{N \cdot (L / R)}{RTT + (L / R)}$.</p>
+      <ul>
+        <li><strong>Go-Back-N (GBN):</strong> Sender maintains window $N$; uses single timer for <code>send_base</code>. Cumulative ACKs. Receiver discards out-of-order packets and re-ACKs highest in-order. On timeout, sender retransmits entire window starting at <code>send_base</code>.</li>
+        <li><strong>Selective Repeat (SR):</strong> Receiver buffers out-of-order packets. Sender maintains individual timers per packet and retransmits only the single unACKed packet on timeout.</li>
+      </ul>
+    </div>
+
+    <!-- Summary Section 5 -->
+    <div class="card" style="margin-bottom: 22px;">
+      <h2>5. Connection-Oriented Transport: TCP</h2>
+      <h3>5.1 Segment Format & Mechanics</h3>
+      <ul>
+        <li><strong>Sequence Numbers:</strong> Byte-stream offset of the first data byte in payload.</li>
+        <li><strong>ACK Numbers:</strong> Next expected byte sequence number (cumulative ACK).</li>
+        <li><strong>Header Length (4 bits):</strong> Length in 32-bit words (min 20B, max 60B).</li>
+        <li><strong>Flags:</strong> SYN, ACK, FIN, RST, PSH, URG, and ECN flags (ECE, CWR).</li>
+        <li><strong>Receive Window (<code>rwnd</code>):</strong> Flow control buffer space advertised by receiver.</li>
+      </ul>
+
+      <h3>5.2 RTT Estimation Formulas (Karn's Algorithm)</h3>
+      <div class="formula-box blue">
+        $$	ext{EstimatedRTT} = (1 - lpha) \cdot 	ext{EstimatedRTT} + lpha \cdot 	ext{SampleRTT} \quad (lpha = 0.125)$$
+        $$	ext{DevRTT} = (1 - eta) \cdot 	ext{DevRTT} + eta \cdot |	ext{SampleRTT} - 	ext{EstimatedRTT}| \quad (eta = 0.25)$$
+        $$	ext{TimeoutInterval} = 	ext{EstimatedRTT} + 4 \cdot 	ext{DevRTT}$$
+      </div>
+
+      <h3>5.3 Fast Retransmit & Delayed ACKs (RFC 5681)</h3>
+      <ul>
+        <li><strong>Delayed ACK:</strong> In-order segment arrives with all previous data ACKed: wait up to 500 ms for next segment. If another arrives, send cumulative ACK immediately.</li>
+        <li><strong>Fast Retransmit:</strong> Receipt of 3 duplicate ACKs (4 identical ACKs total) triggers immediate retransmission of missing segment before timer timeout.</li>
+      </ul>
+
+      <h3>5.4 Handshake & TIME_WAIT ($2 	imes 	ext{MSL}$)</h3>
+      <ul>
+        <li><strong>Setup:</strong> 3-way handshake initializes sequence numbers and buffer variables.</li>
+        <li><strong>Teardown:</strong> 4-way FIN/ACK handshake. Client remains in <code>TIME_WAIT</code> for $2 	imes 	ext{MSL}$ (Maximum Segment Lifetime) to retransmit lost final ACKs and drain old lingering packets from the network.</li>
+      </ul>
+    </div>
+
+    <!-- Summary Section 6 & 7 -->
+    <div class="card" style="margin-bottom: 22px;">
+      <h2>6. Congestion Control Mechanics (AIMD to CUBIC & BBR)</h2>
+      <ul>
+        <li><strong>Costs of Congestion:</strong> Exploding queue delays as $\lambda_{	ext{in}} 	o R/2$, capacity wasted on retransmitting dropped packets, and upstream network capacity wasted when multi-hop packets drop downstream.</li>
+        <li><strong>AIMD Principle:</strong> Additive increase (+1 MSS/RTT) probes for bandwidth; multiplicative decrease (cut in half on 3 dup ACKs, cut to 1 MSS on timeout) drives competing flows to efficiency and fairness.</li>
+        <li><strong>Tahoe vs. Reno:</strong> Tahoe cuts to 1 MSS on 3 dup ACKs. Reno cuts $	ext{ssthresh} = 	ext{cwnd}/2$, sets $	ext{cwnd} = 	ext{ssthresh} + 3	ext{ MSS}$ (Fast Recovery), and returns directly to linear Congestion Avoidance upon a fresh ACK.</li>
+        <li><strong>CUBIC:</strong> Modern Linux default. Uses a cubic window growth curve centered at inflection time $K$ ($W_{\max}$).</li>
+        <li><strong>Google BBR:</strong> Delay-based congestion control that measures Bottleneck Bandwidth and min RTT, avoiding router bufferbloat entirely.</li>
+      </ul>
+    </div>
+
+    <!-- Summary Section 8 -->
+    <div class="card">
+      <h2>7. Transport Evolution & QUIC (HTTP/3)</h2>
+      <ul>
+        <li><strong>TCP/TLS Bottlenecks:</strong> 2&ndash;3 serial RTT handshakes; Head-of-Line (HoL) blocking where a single lost packet delays all multiplexed streams in the socket buffer.</li>
+        <li><strong>QUIC Innovations:</strong> Runs in user space over UDP (port 443); combines transport and TLS 1.3 handshake into 1 RTT (0 RTT on resumption); eliminates HoL blocking by tracking streams independently at Layer 4; supports seamless connection migration via 64-bit Connection IDs.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ==================== TAB 3: Q&A BANK ==================== -->
+  <div id="tab-qna" class="tab-pane">
+    <div class="hero-banner">
+      <h1>Transport Layer: Complete Q&amp;A Knowledge Bank</h1>
+      <p>31 comprehensive questions and technical answers covering explicit slide prompts and fundamental concepts.</p>
+    </div>
+
+    <!-- Q1 -->
+    <div class="qa-card">
+      <div class="qa-header">
+        <div class="qa-meta"><span class="badge badge-explicit">Explicit</span><span class="badge badge-slide">Slide 4</span></div>
+        <h3 class="question-text">Q1. Why is SCTP and DCCP deployment limited in the Internet?</h3>
+      </div>
+      <div class="qa-body">
+        <p><strong>Answer:</strong> SCTP and DCCP suffer from <em>middlebox ossification</em>. Existing firewalls and NAT routers deployed across the Internet only understand TCP (protocol 6) and UDP (protocol 17). Because middleboxes cannot inspect SCTP (protocol 132) or DCCP (protocol 33) headers, they drop these packets, preventing adoption on the public Internet.</p>
+        <div class="key-takeaway"><strong>Key Takeaway:</strong> New Layer 4 protocols must encapsulate inside UDP to bypass legacy middlebox restrictions.</div>
+      </div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="qa-card">
+      <div class="qa-header">
+        <div class="qa-meta"><span class="badge badge-explicit">Explicit</span><span class="badge badge-slide">Slide 4</span></div>
+        <h3 class="question-text">Q2. Why was QUIC designed on top of UDP?</h3>
+      </div>
+      <div class="qa-body">
+        <p><strong>Answer:</strong> By encapsulating inside UDP, QUIC avoids middlebox drops and operating system kernel upgrade delays. Firewalls already permit UDP on port 443, allowing QUIC to implement connection setup, encryption, and congestion control completely in <em>user space</em>.</p>
+        <div class="key-takeaway"><strong>Key Takeaway:</strong> UDP acts as an application-level substrate through intermediate firewalls and NATs.</div>
+      </div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="qa-card">
+      <div class="qa-header">
+        <div class="qa-meta"><span class="badge badge-inferred">Inferred Core</span><span class="badge badge-slide">Slide 5</span></div>
+        <h3 class="question-text">Q3. What is the fundamental difference between network layer and transport layer communication?</h3>
+      </div>
+      <div class="qa-body">
+        <p><strong>Answer:</strong> The network layer provides logical communication between <strong>hosts</strong> (IP addresses), whereas the transport layer provides logical communication between <strong>processes</strong> (port numbers). In the household analogy: houses are hosts, children in houses are processes, letters are messages, Ann & Bill are the transport protocol, and the postal service is the network layer.</p>
+      </div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="qa-card">
+      <div class="qa-header">
+        <div class="qa-meta"><span class="badge badge-explicit">Explicit</span><span class="badge badge-slide">Slide 12 &ndash; 13</span></div>
+        <h3 class="question-text">Q4. How does the transport layer know to deliver an arriving message to Firefox rather than Netflix or Skype?</h3>
+      </div>
+      <div class="qa-body">
+        <p><strong>Answer:</strong> Through <strong>demultiplexing</strong> using the <em>Destination Port Number</em> in the segment header. The client OS assigns an ephemeral port to the Firefox socket during request creation. The server echoes this port back in the Destination Port field, allowing the OS to route the payload to Firefox's socket.</p>
+      </div>
+    </div>
+
+    <!-- Q5 -->
+    <div class="qa-card">
+      <div class="qa-header">
+        <div class="qa-meta"><span class="badge badge-inferred">Inferred Core</span><span class="badge badge-slide">Slide 18 &ndash; 21</span></div>
+        <h3 class="question-text">Q5. Why does TCP demux require a 4-tuple, whereas UDP requires only a 2-tuple?</h3>
+      </div>
+      <div class="qa-body">
+        <p><strong>Answer:</strong> UDP is stateless: all datagrams sharing the destination IP and port are placed in the same socket regardless of source. TCP is connection-oriented and tracks sequence numbers and buffers per connection; therefore, a server must separate concurrent clients on the same port into dedicated sockets identified by the full 4-tuple <code>(Source IP, Source Port, Dest IP, Dest Port)</code>.</p>
+      </div>
+    </div>
+
+    <!-- Q6 -->
+    <div class="qa-card">
+      <div class="qa-header">
+        <div class="qa-meta"><span class="badge badge-explicit">Explicit</span><span class="badge badge-slide">Slide 24</span></div>
+        <h3 class="question-text">Q6. Why is there a UDP? What are its primary design advantages?</h3>
+      </div>
+      <div class="qa-body">
+        <p><strong>Answer:</strong> UDP provides: 1) Zero connection establishment delay (0 RTT), 2) No endpoint connection state (high server concurrency), 3) Small fixed 8-byte header overhead, and 4) No congestion control throttling, allowing applications to transmit at their own designated pace.</p>
+      </div>
+    </div>
+
+    <!-- Q7 -->
+    <div class="qa-card">
+      <div class="qa-header">
+        <div class="qa-meta"><span class="badge badge-explicit">Explicit</span><span class="badge badge-slide">Slide 29</span></div>
+        <h3 class="question-text">Q7. How large should a UDP segment be?</h3>
+      </div>
+      <div class="qa-body">
+        <p><strong>Answer:</strong> Theoretically up to $65,535	ext{ bytes}$ (bounded by the 16-bit Length field). In practice, segments are kept below the link MTU (typically 1500 bytes on Ethernet) to avoid IP-layer fragmentation and reassembly overhead.</p>
+      </div>
+    </div>
+
+    <!-- Q8 -->
+    <div class="qa-card">
+      <div class="qa-header">
+        <div class="qa-meta"><span class="badge badge-explicit">Explicit</span><span class="badge badge-slide">Slide 29</span></div>
+        <h3 class="question-text">Q8. Is the length field in the UDP header strictly necessary?</h3>
+      </div>
+      <div class="qa-body">
+        <p><strong>Answer:</strong> Conceptually no, because total segment length can be derived from the IP Total Length minus IP Header Length. Technically yes, RFC 768 mandates the field to maintain protocol independence and fixed header structure.</p>
+      </div>
+    </div>
+
+    <!-- Q9 -->
+    <div class="qa-card">
+      <div class="qa-header">
+        <div class="qa-meta"><span class="badge badge-inferred">Inferred Core</span><span class="badge badge-slide">Slide 30 &ndash; 31</span></div>
+        <h3 class="question-text">Q9. How does the UDP checksum calculate and detect bit errors?</h3>
+      </div>
+      <div class="qa-body">
+        <p><strong>Answer:</strong> The sender treats all 16-bit words as integers, sums them with 1's complement end-around carry, inverts the bits, and stores the result in the Checksum field. The receiver sums all 16-bit words including the checksum; a result of all 1s (<code>0xFFFF</code>) confirms no detected errors.</p>
+      </div>
+    </div>
+
+    <!-- Q10 -->
+    <div class="qa-card">
+      <div class="qa-header">
+        <div class="qa-meta"><span class="badge badge-explicit">Explicit</span><span class="badge badge-slide">Slide 38</span></div>
+        <h3 class="question-text">Q10. In a stop-and-wait protocol, do we need sequence numbers in data packets?</h3>
+      </div>
+      <div class="qa-body">
+        <p><strong>Answer: Yes.</strong> Without a sequence number, if an ACK is delayed or lost and the sender retransmits, the receiver cannot determine whether the packet is a duplicate or new data. A 1-bit alternating sequence number ($0$ or $1$) solves this.</p>
+      </div>
+    </div>
+
+    <!-- Q11 -->
+    <div class="qa-card">
+      <div class="qa-header">
+        <div class="qa-meta"><span class="badge badge-explicit">Explicit</span><span class="badge badge-slide">Slide 38</span></div>
+        <h3 class="question-text">Q11. In a stop-and-wait protocol, do we need sequence numbers in ACK packets?</h3>
+      </div>
+      <div class="qa-body">
+        <p><strong>Answer: Yes.</strong> Sequence numbers in ACKs allow the sender to verify exactly which transmitted packet is being acknowledged, preventing confusion from delayed ACKs.</p>
+      </div>
+    </div>
+
+    <!-- Q12 -->
+    <div class="qa-card">
+      <div class="qa-header">
+        <div class="qa-meta"><span class="badge badge-explicit">Explicit</span><span class="badge badge-slide">Slide 38</span></div>
+        <h3 class="question-text">Q12. Can we use a single type of ACK in reliable data transfer protocols?</h3>
+      </div>
+      <div class="qa-body">
+        <p><strong>Answer: Yes.</strong> By including the sequence number in the ACK, positive ACKs alone handle retransmission. Duplicate ACKs implicitly communicate packet loss without needing negative acknowledgments (NAKs).</p>
+      </div>
+    </div>
+
+    <!-- Q13 -->
+    <div class="qa-card">
+      <div class="qa-header">
+        <div class="qa-meta"><span class="badge badge-explicit">Explicit</span><span class="badge badge-slide">Slide 40</span></div>
+        <h3 class="question-text">Q13. In pipelined data transfer, which window/pipe size should be selected?</h3>
+      </div>
+      <div class="qa-body">
+        <p><strong>Answer:</strong> The window size $N$ should match the Bandwidth-Delay Product (BDP): $N pprox rac{	ext{Bandwidth} 	imes 	ext{RTT}}{L}$. This maximizes link utilization while preventing buffer buildup at bottleneck routers.</p>
+      </div>
+    </div>
+
+    <!-- Q14 -->
+    <div class="qa-card">
+      <div class="qa-header">
+        <div class="qa-meta"><span class="badge badge-inferred">Inferred Core</span><span class="badge badge-slide">Slide 41 &ndash; 43</span></div>
+        <h3 class="question-text">Q14. How do Go-Back-N (GBN) and Selective Repeat (SR) differ in buffering and timers?</h3>
+      </div>
+      <div class="qa-body">
+        <p><strong>Answer:</strong> GBN uses cumulative ACKs, a single timer for the oldest unACKed packet, and no receiver buffering (out-of-order packets are discarded; entire window is retransmitted on timeout). SR buffers out-of-order packets at the receiver, uses individual ACKs, and maintains individual timers per packet to retransmit only unACKed segments.</p>
+      </div>
+    </div>
+
+    <!-- Q15 -->
+    <div class="qa-card">
+      <div class="qa-header">
+        <div class="qa-meta"><span class="badge badge-explicit">Explicit</span><span class="badge badge-slide">Slide 46</span></div>
+        <h3 class="question-text">Q15. What is the maximum possible header size of a TCP segment?</h3>
+      </div>
+      <div class="qa-body">
+        <p><strong>Answer: 60 bytes.</strong> The 4-bit Data Offset / Header Length field measures length in 32-bit (4-byte) words. The maximum value of a 4-bit field is $15$. Thus: $15 	imes 4	ext{ bytes} = 60	ext{ bytes}$ (20 bytes fixed base + 40 bytes options).</p>
+      </div>
+    </div>
+
+    <!-- Q16 -->
+    <div class="qa-card">
+      <div class="qa-header">
+        <div class="qa-meta"><span class="badge badge-explicit">Explicit</span><span class="badge badge-slide">Slide 47</span></div>
+        <h3 class="question-text">Q16. How does the TCP receiver handle out-of-order segments?</h3>
+      </div>
+      <div class="qa-body">
+        <p><strong>Answer:</strong> The official TCP specification leaves this implementation-dependent. In practice, modern operating systems buffer out-of-order segments to prevent unnecessary retransmissions and immediately emit duplicate ACKs identifying the next expected in-order byte.</p>
+      </div>
+    </div>
+
+    <!-- Q17 -->
+    <div class="qa-card">
+      <div class="qa-header">
+        <div class="qa-meta"><span class="badge badge-explicit">Explicit</span><span class="badge badge-slide">Slide 49</span></div>
+        <h3 class="question-text">Q17. How should the TCP timeout value be set, and what are the trade-offs?</h3>
+      </div>
+      <div class="qa-body">
+        <p><strong>Answer:</strong> The timeout must be longer than RTT. If set too short, premature timeouts cause unnecessary duplicate retransmissions. If set too long, recovery after segment loss is sluggish, degrading throughput. TCP sets $	ext{TimeoutInterval} = 	ext{EstimatedRTT} + 4 \cdot 	ext{DevRTT}$.</p>
+      </div>
+    </div>
+
+    <!-- Q18 -->
+    <div class="qa-card">
+      <div class="qa-header">
+        <div class="qa-meta"><span class="badge badge-explicit">Explicit</span><span class="badge badge-slide">Slide 49</span></div>
+        <h3 class="question-text">Q18. Why must TCP ignore retransmissions when estimating SampleRTT? (Acknowledgment Ambiguity)</h3>
+      </div>
+      <div class="qa-body">
+        <p><strong>Answer:</strong> Under <strong>Karn's Algorithm</strong>, when an ACK arrives for a retransmitted packet, the sender cannot tell whether it acknowledges the original transmission or the retransmission. Sampling retransmissions severely skews RTT estimates; therefore, TCP measures SampleRTT only for segments sent once.</p>
+      </div>
+    </div>
+
+    <!-- Q19 -->
+    <div class="qa-card">
+      <div class="qa-header">
+        <div class="qa-meta"><span class="badge badge-explicit">Explicit</span><span class="badge badge-slide">Slide 59 &ndash; 61</span></div>
+        <h3 class="question-text">Q19. What happens if the network delivers data faster than the application removes it from socket buffers?</h3>
+      </div>
+      <div class="qa-body">
+        <p><strong>Answer:</strong> Socket buffers fill up and overflow, dropping subsequent incoming segments. TCP prevents this via <strong>flow control</strong>: the receiver advertises remaining free buffer space using the <code>rwnd</code> field, and the sender enforces $	ext{LastByteSent} - 	ext{LastByteAcked} \le 	ext{rwnd}$.</p>
+      </div>
+    </div>
+
+    <!-- Q20 -->
+    <div class="qa-card">
+      <div class="qa-header">
+        <div class="qa-meta"><span class="badge badge-inferred">Inferred Core</span><span class="badge badge-slide">Slide 66</span></div>
+        <h3 class="question-text">Q20. Why must the TCP client enter the TIME_WAIT state for $2 	imes 	ext{MSL}$?</h3>
+      </div>
+      <div class="qa-body">
+        <p><strong>Answer:</strong> 1) To gracefully close the connection: if the client's final ACK is lost, the server retransmits its FIN, which the client can still ACK in TIME_WAIT. 2) To let lingering duplicate packets expire, preventing them from corrupting future connections reusing the same port numbers.</p>
+      </div>
+    </div>
+
+    <!-- Q21 -->
+    <div class="qa-card">
+      <div class="qa-header">
+        <div class="qa-meta"><span class="badge badge-explicit">Explicit</span><span class="badge badge-slide">Slide 69</span></div>
+        <h3 class="question-text">Q21. What happens to throughput and delay as packet arrival rate approaches link capacity $R/2$?</h3>
+      </div>
+      <div class="qa-body">
+        <p><strong>Answer:</strong> Throughput asymptotically reaches link capacity ($R/2$), but queuing delay increases non-linearly toward infinity as router buffers become saturated.</p>
+      </div>
+    </div>
+
+    <!-- Q22 -->
+    <div class="qa-card">
+      <div class="qa-header">
+        <div class="qa-meta"><span class="badge badge-explicit">Explicit</span><span class="badge badge-slide">Slide 75</span></div>
+        <h3 class="question-text">Q22. What happens as sending rate increases in a multi-hop congested network?</h3>
+      </div>
+      <div class="qa-body">
+        <p><strong>Answer:</strong> Aggressive flows starve competing traffic sharing downstream bottlenecks, driving competing throughput to zero. Furthermore, when a packet is dropped downstream, all upstream transmission capacity and buffer memory used by that packet are completely wasted.</p>
+      </div>
+    </div>
+
+    <!-- Q23 -->
+    <div class="qa-card">
+      <div class="qa-header">
+        <div class="qa-meta"><span class="badge badge-explicit">Explicit</span><span class="badge badge-slide">Slide 81</span></div>
+        <h3 class="question-text">Q23. Why was AIMD chosen for TCP congestion control?</h3>
+      </div>
+      <div class="qa-body">
+        <p><strong>Answer:</strong> AIMD is mathematically proven to converge competing distributed flows toward both <strong>efficiency</strong> (maximizing link throughput) and <strong>fairness</strong> (equal sharing). Additive increase probes with slope 1, while multiplicative decrease cuts rates proportionally, driving convergence toward the fairness line.</p>
+      </div>
+    </div>
+
+    <!-- Q24 -->
+    <div class="qa-card">
+      <div class="qa-header">
+        <div class="qa-meta"><span class="badge badge-explicit">Explicit</span><span class="badge badge-slide">Slide 84 &ndash; 85</span></div>
+        <h3 class="question-text">Q24. When should Slow Start exponential increase switch to linear Congestion Avoidance?</h3>
+      </div>
+      <div class="qa-body">
+        <p><strong>Answer:</strong> When <code>cwnd</code> reaches the slow start threshold (<code>ssthresh</code>), defined on loss as $	ext{ssthresh} = 	ext{cwnd}/2$. Below <code>ssthresh</code>, window grows exponentially; at or above <code>ssthresh</code>, it switches to linear probing (+1 MSS per RTT).</p>
+      </div>
+    </div>
+
+    <!-- Q25 -->
+    <div class="qa-card">
+      <div class="qa-header">
+        <div class="qa-meta"><span class="badge badge-inferred">Inferred Core</span><span class="badge badge-slide">Slide 85 &ndash; 89</span></div>
+        <h3 class="question-text">Q25. How do TCP Tahoe and TCP Reno differ in handling 3 duplicate ACKs?</h3>
+      </div>
+      <div class="qa-body">
+        <p><strong>Answer:</strong> Tahoe treats 3 duplicate ACKs like a timeout: drops $	ext{cwnd} = 1	ext{ MSS}$ and restarts Slow Start. Reno recognizes packets are still reaching the receiver: it sets $	ext{ssthresh} = 	ext{cwnd}/2$, retransmits the missing segment, inflates window to $	ext{ssthresh} + 3	ext{ MSS}$ (Fast Recovery), and enters linear Congestion Avoidance upon a fresh ACK.</p>
+      </div>
+    </div>
+
+    <!-- Q26 -->
+    <div class="qa-card">
+      <div class="qa-header">
+        <div class="qa-meta"><span class="badge badge-explicit">Explicit</span><span class="badge badge-slide">Slide 92</span></div>
+        <h3 class="question-text">Q26. Is there a better way than linear AIMD to probe for usable bandwidth? (TCP CUBIC)</h3>
+      </div>
+      <div class="qa-body">
+        <p><strong>Answer: Yes&mdash;TCP CUBIC.</strong> Linear AIMD takes too long to recover on high-bandwidth, long-delay pipes. CUBIC uses a cubic function centered on time $K$ ($W_{\max}$), ramping window size quickly after a drop, flattening growth near prior peak capacity, and accelerating only when probing new bandwidth.</p>
+      </div>
+    </div>
+
+    <!-- Q27 -->
+    <div class="qa-card">
+      <div class="qa-header">
+        <div class="qa-meta"><span class="badge badge-inferred">Inferred Core</span><span class="badge badge-slide">Slide 95 &ndash; 97</span></div>
+        <h3 class="question-text">Q27. How does delay-based congestion control (e.g., Google BBR) eliminate bufferbloat?</h3>
+      </div>
+      <div class="qa-body">
+        <p><strong>Answer:</strong> Loss-based TCP fills router buffers until packets drop, causing bufferbloat delays. Delay-based congestion control compares measured throughput against uncongested throughput (${	ext{cwnd}}/{	ext{RTT}_{\min}}$). If RTT rises while throughput plateaus, it reduces window size <em>before loss occurs</em>, keeping the pipe full without filling buffers.</p>
+      </div>
+    </div>
+
+    <!-- Q28 -->
+    <div class="qa-card">
+      <div class="qa-header">
+        <div class="qa-meta"><span class="badge badge-explicit">Explicit</span><span class="badge badge-slide">Slide 100</span></div>
+        <h3 class="question-text">Q28. Is TCP fair? Under what conditions does fairness hold?</h3>
+      </div>
+      <div class="qa-body">
+        <p><strong>Answer: Yes, under idealized conditions:</strong> all sessions share the same RTT, session count is fixed, and all run in Congestion Avoidance. In practice, flows with shorter RTTs ramp window sizes faster, capturing an unfair share of bandwidth.</p>
+      </div>
+    </div>
+
+    <!-- Q29 -->
+    <div class="qa-card">
+      <div class="qa-header">
+        <div class="qa-meta"><span class="badge badge-explicit">Explicit</span><span class="badge badge-slide">Slide 101</span></div>
+        <h3 class="question-text">Q29. Must all network applications be "fair"? How do UDP and parallel TCP break fairness?</h3>
+      </div>
+      <div class="qa-body">
+        <p><strong>Answer: No, the Internet has no policing mechanism:</strong> UDP streaming apps transmit at fixed rates without backing off during congestion, starving TCP flows. Web browsers open parallel TCP connections: an app with 11 parallel sockets captures over $50\%$ of an $R/10$ shared bottleneck link.</p>
+      </div>
+    </div>
+
+    <!-- Q30 -->
+    <div class="qa-card">
+      <div class="qa-header">
+        <div class="qa-meta"><span class="badge badge-inferred">Inferred Core</span><span class="badge badge-slide">Slide 106</span></div>
+        <h3 class="question-text">Q30. Why is QUIC connection establishment faster than standard TCP + TLS?</h3>
+      </div>
+      <div class="qa-body">
+        <p><strong>Answer:</strong> TCP + TLS requires sequential handshakes: 1 RTT for TCP + 1&ndash;2 RTTs for TLS = 2&ndash;3 RTTs total. QUIC merges transport state parameters and TLS 1.3 cryptographic key negotiation into a <strong>single handshake (1 RTT)</strong>, with 0-RTT support on resumed connections.</p>
+      </div>
+    </div>
+
+    <!-- Q31 -->
+    <div class="qa-card">
+      <div class="qa-header">
+        <div class="qa-meta"><span class="badge badge-inferred">Inferred Core</span><span class="badge badge-slide">Slide 107 &ndash; 108</span></div>
+        <h3 class="question-text">Q31. How does QUIC eliminate transport Head-of-Line (HoL) blocking?</h3>
+      </div>
+      <div class="qa-body">
+        <p><strong>Answer:</strong> In HTTP/2 over TCP, all streams share one byte stream; a single lost packet blocks all streams in the receive buffer. QUIC provides independent stream-level sequencing at Layer 4: a dropped packet in Stream 1 pauses only Stream 1, allowing Streams 2 and 3 to be delivered to the application immediately.</p>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- Interactive Tab Switching Script -->
+<script>
+  function switchTab(tabId, btn) {
+    document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('active-pane'));
+    document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+    
+    document.getElementById('tab-' + tabId).classList.add('active-pane');
+    btn.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+
+</body>
+</html>
