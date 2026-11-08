@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Transport Layer Exam Cheat Sheet</title>
+<!-- KaTeX for crisp and flawless math rendering -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+
+<style>
+  :root {
+    --primary: #1e3a8a;
+    --primary-light: #eff6ff;
+    --secondary: #0284c7;
+    --accent: #dc2626;
+    --text-dark: #1f2937;
+    --text-muted: #4b5563;
+    --border: #e5e7eb;
+    --bg-card: #ffffff;
+    --bg-page: #f8fafc;
+  }
+  
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+    color: var(--text-dark);
+    background-color: var(--bg-page);
+    margin: 0;
+    padding: 24px;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  header {
+    background: linear-gradient(135deg, #1e3a8a 0%, #0369a1 100%);
+    color: white;
+    padding: 28px 32px;
+    border-radius: 12px;
+    margin-bottom: 28px;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+  }
+
+  header h1 {
+    margin: 0 0 8px 0;
+    font-size: 28px;
+    font-weight: 700;
+  }
+
+  header p {
+    margin: 0;
+    opacity: 0.9;
+    font-size: 15px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(540px, 1fr));
+    gap: 20px;
+  }
+
+  @media (max-width: 768px) {
+    .grid { grid-template-columns: 1fr; }
+    body { padding: 12px; }
+  }
+
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 24px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+
+  .card-full {
+    grid-column: 1 / -1;
+  }
+
+  .card h2 {
+    margin-top: 0;
+    margin-bottom: 14px;
+    font-size: 18px;
+    color: var(--primary);
+    border-bottom: 2px solid var(--primary-light);
+    padding-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .formula-box {
+    background: var(--primary-light);
+    border-left: 4px solid var(--secondary);
+    padding: 10px 14px;
+    border-radius: 4px;
+    margin: 12px 0;
+    font-size: 14.5px;
+  }
+
+  .formula-box strong {
+    color: #1e40af;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: 13.5px;
+  }
+
+  th, td {
+    padding: 8px 12px;
+    text-align: left;
+    border: 1px solid var(--border);
+  }
+
+  th {
+    background-color: #f1f5f9;
+    font-weight: 600;
+    color: #334155;
+  }
+
+  tr:nth-child(even) {
+    background-color: #f8fafc;
+  }
+
+  ul, ol {
+    margin: 8px 0;
+    padding-left: 20px;
+    font-size: 14px;
+  }
+
+  li {
+    margin-bottom: 5px;
+  }
+
+  .tag {
+    display: inline-block;
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  .tag-tcp { background: #dbeafe; color: #1e40af; }
+  .tag-udp { background: #fef3c7; color: #92400e; }
+  .tag-warn { background: #fee2e2; color: #991b1b; }
+  
+  code {
+    background: #f1f5f9;
+    padding: 2px 5px;
+    border-radius: 4px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 13px;
+    color: #0f172a;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <h1>Transport Layer: Exam Fast-Review Cheatsheet</h1>
+    <p>Comprehensive high-density summary of protocols, architectures, formulas, and state models.</p>
+  </header>
+
+  <div class="grid">
+
+    <!-- Card 1: Fundamentals & Demux -->
+    <div class="card">
+      <h2>1. Transport Core & Demultiplexing</h2>
+      <ul>
+        <li><strong>Role:</strong> Logical end-to-end communication between <em>processes</em> (Network layer handles host-to-host).</li>
+        <li><strong>UDP Demux (2-Tuple):</strong> <code>(Destination IP, Destination Port)</code>. Packets with different source IPs/ports matching this 2-tuple enter the exact same socket.</li>
+        <li><strong>TCP Demux (4-Tuple):</strong> <code>(Source IP, Source Port, Dest IP, Dest Port)</code>. Server listens on welcoming socket, then spawns a dedicated socket per client 4-tuple.</li>
+        <li><strong>Stack Protocol Identifiers:</strong>
+          <ul>
+            <li>Ethernet Frame Type &rarr; IP</li>
+            <li>IP Header Protocol ID: <code>6</code> (TCP), <code>17</code> (UDP), <code>33</code> (DCCP), <code>132</code> (SCTP)</li>
+            <li>Transport Header &rarr; Port Number</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Card 2: UDP vs TCP -->
+    <div class="card">
+      <h2>2. UDP vs. TCP Quick Comparison</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Feature</th>
+            <th>UDP (RFC 768)</th>
+            <th>TCP (RFC 793, 9293)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Connection</strong></td>
+            <td>Connectionless (0 RTT)</td>
+            <td>3-Way Handshake (1 RTT)</td>
+          </tr>
+          <tr>
+            <td><strong>Reliability</strong></td>
+            <td>Unreliable, unordered</td>
+            <td>Reliable, strictly ordered byte-stream</td>
+          </tr>
+          <tr>
+            <td><strong>Header Size</strong></td>
+            <td>Fixed 8 bytes</td>
+            <td>20 &ndash; 60 bytes (Options field)</td>
+          </tr>
+          <tr>
+            <td><strong>Flow / Congestion</strong></td>
+            <td>None (rate uncontrolled)</td>
+            <td>Flow control (rwnd) &amp; Congestion (cwnd)</td>
+          </tr>
+          <tr>
+            <td><strong>Typical Use</strong></td>
+            <td>DNS, VoIP, Streaming, QUIC</td>
+            <td>Web (HTTP/1.1, HTTP/2), Email, SSH, FTP</td>
+          </tr>
+        </tbody>
+      </table>
+      <ul>
+        <li><strong>UDP Header Fields (8B):</strong> Source Port (16b), Dest Port (16b), Length (16b), Checksum (16b).</li>
+        <li><strong>Internet Checksum:</strong> 1's complement sum of 16-bit integers across header, payload &amp; IP pseudo-header. Receiver sums all words + checksum; must equal all 1s (<code>0xFFFF</code>).</li>
+      </ul>
+    </div>
+
+    <!-- Card 3: RDT Formulas & Pipelining -->
+    <div class="card">
+      <h2>3. Reliable Data Transfer (RDT) & Pipelining</h2>
+      <div class="formula-box">
+        <strong>Stop-and-Wait Sender Utilization:</strong>
+        $$U_{\text{sender}} = \frac{L / R}{RTT + (L / R)}$$
+      </div>
+      <div class="formula-box">
+        <strong>Pipelined Protocol Utilization ($N$ packets in flight):</strong>
+        $$U_{\text{sender}} = \frac{N \cdot (L / R)}{RTT + (L / R)}$$
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Mechanism</th>
+            <th>Go-Back-N (GBN)</th>
+            <th>Selective Repeat (SR)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>ACK Scheme</strong></td>
+            <td>Cumulative ACK up to $n$</td>
+            <td>Individual ACK for each packet</td>
+          </tr>
+          <tr>
+            <td><strong>Sender Timers</strong></td>
+            <td>1 single timer for oldest unACKed packet</td>
+            <td>Individual timer per packet</td>
+          </tr>
+          <tr>
+            <td><strong>Timeout Action</strong></td>
+            <td>Retransmits entire window from <code>send_base</code></td>
+            <td>Retransmits only the timed-out packet</td>
+          </tr>
+          <tr>
+            <td><strong>Receiver Buffer</strong></td>
+            <td>Discards out-of-order packets; re-ACKs highest in-order</td>
+            <td>Buffers out-of-order packets</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Card 4: TCP Segment & RTT Estimation -->
+    <div class="card">
+      <h2>4. TCP Segment, MSS/MTU &amp; RTT Estimator</h2>
+      <ul>
+        <li><strong>Seq Number:</strong> Byte-stream position of the 1st byte in segment.</li>
+        <li><strong>ACK Number:</strong> Next byte expected from sender (cumulative).</li>
+        <li><strong>MSS &amp; MTU:</strong> $\text{MSS} = \text{MTU} - (\text{IP Header} + \text{TCP Header})$. Default Min MTU = $576\text{ B} \rightarrow \text{MSS} = 536\text{ B}$. Ethernet MTU = $1500\text{ B} \rightarrow \text{MSS} = 1460\text{ B}$.</li>
+      </ul>
+      <div class="formula-box">
+        <strong>Estimated RTT (EWMA with $\alpha = 0.125$):</strong>
+        $$\text{EstimatedRTT} = (1 - \alpha) \cdot \text{EstimatedRTT} + \alpha \cdot \text{SampleRTT}$$
+      </div>
+      <div class="formula-box">
+        <strong>Deviation RTT (Safety Margin with $\beta = 0.25$):</strong>
+        $$\text{DevRTT} = (1 - \beta) \cdot \text{DevRTT} + \beta \cdot |\text{SampleRTT} - \text{EstimatedRTT}|$$
+      </div>
+      <div class="formula-box">
+        <strong>Timeout Interval Calculation:</strong>
+        $$\text{TimeoutInterval} = \text{EstimatedRTT} + 4 \cdot \text{DevRTT}$$
+        <small style="color:#64748b;">*Note: Retransmitted segments are ignored when sampling RTT (Karn's algorithm to eliminate ACK Ambiguity).*</small>
+      </div>
+    </div>
+
+    <!-- Card 5: Flow Control & Connection Lifecycle -->
+    <div class="card">
+      <h2>5. Flow Control &amp; Connection Lifecycle</h2>
+      <ul>
+        <li><strong>Flow Control:</strong> Protects receiver's socket buffer from overflowing.
+          $$\text{LastByteSent} - \text{LastByteAcked} \le \text{rwnd}$$
+          $$\text{rwnd} = \text{RcvBuffer} - [\text{LastByteRcvd} - \text{LastByteRead}]$$
+        </li>
+        <li><strong>TCP 3-Way Handshake (Setup):</strong>
+          <ol>
+            <li><code>Client &rarr; Server:</code> SYN = 1, Seq = $x$</li>
+            <li><code>Server &rarr; Client:</code> SYN = 1, ACK = 1, Seq = $y$, Ack = $x + 1$</li>
+            <li><code>Client &rarr; Server:</code> ACK = 1, Seq = $x + 1$, Ack = $y + 1$ (can piggyback data)</li>
+          </ol>
+        </li>
+        <li><strong>TCP 4-Way Teardown &amp; TIME_WAIT:</strong>
+          <ul>
+            <li><code>Client &rarr; Server:</code> FIN=1 &rarr; Server returns ACK (Client enters <code>FIN_WAIT_2</code>).</li>
+            <li><code>Server &rarr; Client:</code> FIN=1 &rarr; Client returns ACK (Client enters <code>TIME_WAIT</code>).</li>
+            <li><strong>Why TIME_WAIT = $2 \times \text{MSL}$?</strong> Guarantees server receives final ACK (retransmits ACK if lost) and lets old duplicate segments die out in network.</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Card 6: Congestion Control & Algorithms -->
+    <div class="card">
+      <h2>6. TCP Congestion Control (Tahoe, Reno, CUBIC)</h2>
+      <div class="formula-box">
+        <strong>Effective Sending Rate Limit:</strong>
+        $$\text{Rate} \approx \frac{\text{cwnd}}{\text{RTT}} \text{ bytes/sec}, \quad \text{In-Flight} \le \min(\text{cwnd}, \text{rwnd})$$
+      </div>
+      <ul>
+        <li><strong>Slow Start (SS):</strong> Starts at $\text{cwnd} = 1\text{ MSS}$. Grows exponentially (doubles every RTT, $+1\text{ MSS}$ per received ACK) until $\text{cwnd} \ge \text{ssthresh}$.</li>
+        <li><strong>Congestion Avoidance (CA):</strong> Linear growth ($\text{cwnd} = \text{cwnd} + 1\text{ MSS}$ per RTT).</li>
+        <li><strong>Fast Retransmit:</strong> 3 Duplicate ACKs (4 identical ACKs total) triggers immediate retransmission without waiting for timer timeout.</li>
+        <li><strong>Loss Event Handling:</strong>
+          <ul>
+            <li><strong>Timeout:</strong> Set $\text{ssthresh} = \text{cwnd} / 2$, drop $\text{cwnd} = 1\text{ MSS}$, enter Slow Start.</li>
+            <li><strong>3 Duplicate ACKs (Tahoe):</strong> Drops to $\text{cwnd} = 1\text{ MSS}$ (Slow Start).</li>
+            <li><strong>3 Duplicate ACKs (Reno):</strong> Sets $\text{ssthresh} = \text{cwnd} / 2$, $\text{cwnd} = \text{ssthresh} + 3\text{ MSS}$ (window inflation, Fast Recovery). On fresh ACK &rarr; sets $\text{cwnd} = \text{ssthresh}$ &rarr; enters CA.</li>
+          </ul>
+        </li>
+        <li><strong>Modern Variants:</strong>
+          <ul>
+            <li><strong>TCP CUBIC:</strong> Uses cubic function centered at time $K$ where window reaches $W_{\max}$. Quick initial ramp-up, flattens near capacity, then explores aggressively. Default in Linux.</li>
+            <li><strong>Delay-Based (BBR):</strong> Keeps pipe full without buffering or causing bufferbloat by comparing measured throughput with uncongested throughput (${\text{cwnd}}/{\text{RTT}_{\min}}$).</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Card 7: QUIC & Modern Transport -->
+    <div class="card card-full">
+      <h2>7. Modern Evolution: QUIC &amp; HTTP/3</h2>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
+        <div>
+          <h4 style="margin: 4px 0 8px 0; color: #1e3a8a;">Middlebox Problem</h4>
+          <p style="font-size: 13.5px; margin:0;">
+            SCTP &amp; DCCP failed wide deployment because middleboxes/firewalls drop unknown L4 protocol IDs. QUIC builds on <strong>UDP</strong> in user space, rendering it transparent to network middleboxes.
+          </p>
+        </div>
+        <div>
+          <h4 style="margin: 4px 0 8px 0; color: #1e3a8a;">0/1-RTT Handshake</h4>
+          <p style="font-size: 13.5px; margin:0;">
+            Standard TCP+TLS requires 2 to 3 serial round-trips before data can flow. QUIC merges connection state, loss recovery, and TLS 1.3 crypto parameters into a single 1-RTT (or 0-RTT for resumed connections) handshake.
+          </p>
+        </div>
+        <div>
+          <h4 style="margin: 4px 0 8px 0; color: #1e3a8a;">No Head-of-Line (HoL) Blocking</h4>
+          <p style="font-size: 13.5px; margin:0;">
+            In HTTP/2 over TCP, a single lost packet halts delivery across <em>all</em> multiplexed streams. QUIC isolates stream recovery at L4: packet loss in Stream A only delays Stream A, while Streams B and C continue uninterrupted.
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>
