@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ICOM6012: Computer Networks - Application Layer Master Study Suite</title>
+<!-- KaTeX CDN for math rendering -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+<style>
+  :root {
+    --primary: #1e3a8a;
+    --primary-light: #2563eb;
+    --primary-soft: #dbeafe;
+    --secondary: #0f172a;
+    --accent: #0284c7;
+    --bg-base: #f8fafc;
+    --card-bg: #ffffff;
+    --text-main: #334155;
+    --text-dark: #0f172a;
+    --text-muted: #64748b;
+    --border: #e2e8f0;
+    --code-bg: #f1f5f9;
+    --success-bg: #ecfdf5;
+    --success-border: #10b981;
+    --warning-bg: #fffbeb;
+    --warning-border: #f59e0b;
+    --danger-bg: #fef2f2;
+    --danger-border: #ef4444;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background-color: var(--bg-base);
+    color: var(--text-main);
+    line-height: 1.65;
+  }
+  .app-container {
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 24px 16px;
+  }
+  /* Sticky Navigation Header */
+  header.nav-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 16px;
+    margin-bottom: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+  }
+  .nav-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .nav-tabs {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .nav-tabs::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    border: none;
+    background: transparent;
+    padding: 8px 16px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+  }
+  .tab-btn:hover {
+    color: var(--primary);
+    background: var(--code-bg);
+  }
+  .tab-btn.active {
+    background: var(--primary);
+    color: #ffffff;
+    box-shadow: 0 2px 4px rgba(30, 58, 138, 0.25);
+  }
+
+  /* Content Cards & Sections */
+  .tab-content { display: none; animation: fadeIn 0.25s ease-in-out; }
+  .tab-content.active { display: block; }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .banner {
+    background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 60%, #0369a1 100%);
+    color: #ffffff;
+    padding: 2.25rem 2rem;
+    border-radius: 14px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.08);
+  }
+  .banner h1 {
+    font-size: clamp(1.5rem, 3.2vw, 2.1rem);
+    font-weight: 800;
+    margin-bottom: 8px;
+    line-height: 1.25;
+  }
+  .banner p {
+    font-size: 1rem;
+    opacity: 0.92;
+    max-width: 850px;
+  }
+
+  /* Grid for Cheatsheet */
+  .grid-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 540px), 1fr));
+    gap: 18px;
+    margin-bottom: 24px;
+  }
+  .full-width { grid-column: 1 / -1; }
+
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    transition: box-shadow 0.2s ease;
+  }
+  .card:hover {
+    box-shadow: 0 4px 8px -1px rgba(0,0,0,0.06);
+  }
+  .card h2 {
+    color: var(--primary);
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+    border-bottom: 2px solid var(--code-bg);
+    padding-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .card h3 {
+    color: var(--secondary);
+    font-size: 1.05rem;
+    margin: 14px 0 6px 0;
+    font-weight: 600;
+  }
+  .card p, .card li { font-size: 0.925rem; color: var(--text-main); }
+  .card ul, .card ol { padding-left: 20px; margin-bottom: 10px; }
+  .card li { margin-bottom: 4px; }
+
+  /* Callouts & Alert Boxes */
+  .callout {
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin: 12px 0;
+    font-size: 0.9rem;
+    line-height: 1.55;
+  }
+  .callout-info { background: #eff6ff; border-left: 4px solid var(--primary-light); color: #1e40af; }
+  .callout-warning { background: var(--warning-bg); border-left: 4px solid var(--warning-border); color: #92400e; }
+  .callout-danger { background: var(--danger-bg); border-left: 4px solid var(--danger-border); color: #991b1b; }
+  .callout-success { background: var(--success-bg); border-left: 4px solid var(--success-border); color: #065f46; }
+
+  /* Formula Container */
+  .formula-box {
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin: 10px 0;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Responsive Tables */
+  .table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+    margin: 14px 0;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+    text-align: left;
+    background: var(--card-bg);
+  }
+  th, td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  th {
+    background: var(--code-bg);
+    color: var(--text-dark);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:nth-child(even) td { background-color: #fbfcfe; }
+
+  /* Badges & Tags */
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 9999px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+  .badge-tcp { background: #dbeafe; color: #1e40af; }
+  .badge-udp { background: #fef3c7; color: #92400e; }
+  .badge-explicit { background: #e0e7ff; color: #3730a3; }
+  .badge-inferred { background: #f1f5f9; color: #475569; }
+  .badge-source { background: #f3e8ff; color: #6b21a8; }
+
+  code {
+    background: var(--code-bg);
+    padding: 2px 5px;
+    border-radius: 4px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.85em;
+    color: #c026d3;
+  }
+  pre code {
+    display: block;
+    padding: 12px;
+    overflow-x: auto;
+    color: #0f172a;
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    line-height: 1.45;
+  }
+
+  /* Q&A Cards */
+  .qa-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+  }
+  .qa-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+  .qa-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--secondary);
+    line-height: 1.35;
+  }
+  .qa-badges {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+  .qa-answer {
+    font-size: 0.925rem;
+    color: var(--text-main);
+    line-height: 1.6;
+    margin-bottom: 12px;
+  }
+  .key-takeaway {
+    background: #f0fdf4;
+    border-left: 4px solid var(--success-border);
+    padding: 10px 14px;
+    border-radius: 6px;
+    font-size: 0.88rem;
+    color: #14532d;
+    font-weight: 500;
+  }
+  .key-takeaway strong { color: #0f172a; }
+
+  /* Print Styles */
+  @media print {
+    header.nav-header { display: none !important; }
+    .tab-content { display: block !important; page-break-after: always; }
+    body { background: #ffffff !important; color: #000000 !important; }
+    .card, .qa-card { box-shadow: none !important; border: 1px solid #94a3b8 !important; }
+  }
+
+  @media (max-width: 768px) {
+    .app-container { padding: 12px 8px; }
+    .grid-cards { grid-template-columns: 1fr; }
+    header.nav-header { flex-direction: column; align-items: flex-start; gap: 8px; }
+    .nav-tabs { width: 100%; }
+    .qa-header { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<header class="nav-header">
+  <div class="nav-title">
+    <span>🌐</span> ICOM6012: Application Layer Master Study Suite
+  </div>
+  <nav class="nav-tabs">
+    <button class="tab-btn active" onclick="switchTab('tab-cheatsheet')">⚡ Tab 1: Fast Cheatsheet</button>
+    <button class="tab-btn" onclick="switchTab('tab-summary')">📖 Tab 2: Detailed Course Summary</button>
+    <button class="tab-btn" onclick="switchTab('tab-qa')">💡 Tab 3: Complete Q&A Bank</button>
+  </nav>
+</header>
+
+<div class="app-container">
+
+  <!-- ========================================== -->
+  <!-- TAB 1: FAST CHEATSHEET -->
+  <!-- ========================================== -->
+  <section id="tab-cheatsheet" class="tab-content active">
+    <div class="banner">
+      <h1>Exam Fast-Review Cheatsheet</h1>
+      <p>High-yield synthesis of network application principles, layer boundaries, protocol comparison matrices, numerical formulas, bitfield formats, and next-gen transport evolution.</p>
+    </div>
+
+    <div class="grid-cards">
+      <!-- Card 1: Core Definitions & Stack Placement -->
+      <div class="card">
+        <h2>📌 1. Core Stack Boundaries & Addressing</h2>
+        <p><strong>Application Philosophy:</strong> Network applications only run on <strong>end systems</strong> (hosts, servers, mobile devices). Network-core routers and link-layer switches do NOT execute application code, enabling rapid app development and edge-driven innovation.</p>
+        
+        <h3>Socket Interface Demultiplexing</h3>
+        <ul>
+          <li><strong>Socket:</strong> The software interface / "door" between the application-layer process (managed by app developers) and transport-layer infrastructure (managed by OS).</li>
+          <li><strong>Addressing Tuples:</strong> Host IP address alone is insufficient because multiple processes run simultaneously. A process is identified by: <code>&lt;IP Address, Port Number&gt;</code>.</li>
+        </ul>
+        <div class="callout callout-info">
+          <strong>Well-Known Ports (0–1023):</strong> HTTP (80), HTTPS (443), SMTP (25), DNS (53), FTP (21). Registered: 1024–49151; Dynamic/Ephemeral: &gt; 49151.
+        </div>
+      </div>
+
+      <!-- Card 2: Side-by-Side Protocol Matrix -->
+      <div class="card">
+        <h2>⚖️ 2. Core Protocol Comparison Matrix</h2>
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>Protocol</th>
+                <th>Transport</th>
+                <th>Default Port</th>
+                <th>Interaction Model</th>
+                <th>State & Encoding</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>HTTP/1.1</strong></td>
+                <td><span class="badge badge-tcp">TCP</span></td>
+                <td>80 / 443</td>
+                <td>Client Pull (Request/Response)</td>
+                <td>Stateless; ASCII text-based headers; Cookies maintain state</td>
+              </tr>
+              <tr>
+                <td><strong>HTTP/2</strong></td>
+                <td><span class="badge badge-tcp">TCP</span></td>
+                <td>443</td>
+                <td>Multiplexed Streams (Client Pull + Server Push)</td>
+                <td>Binary framing layer; HPACK header compression</td>
+              </tr>
+              <tr>
+                <td><strong>HTTP/3</strong></td>
+                <td><span class="badge badge-udp">UDP (QUIC)</span></td>
+                <td>443</td>
+                <td>Multiplexed Independent Streams</td>
+                <td>Binary; built-in TLS 1.3; per-stream loss recovery</td>
+              </tr>
+              <tr>
+                <td><strong>SMTP</strong></td>
+                <td><span class="badge badge-tcp">TCP</span></td>
+                <td>25</td>
+                <td>Client Push (Server-to-Server transfer)</td>
+                <td>Stateful command/response; 7-bit ASCII; CRLF.CRLF end</td>
+              </tr>
+              <tr>
+                <td><strong>IMAP / POP3</strong></td>
+                <td><span class="badge badge-tcp">TCP</span></td>
+                <td>143 / 110</td>
+                <td>Client Pull (Mailbox retrieval from server)</td>
+                <td>IMAP keeps state & server folders; POP3 local-download</td>
+              </tr>
+              <tr>
+                <td><strong>DNS</strong></td>
+                <td><span class="badge badge-udp">UDP</span> (TCP fallback)</td>
+                <td>53</td>
+                <td>Client Pull (Iterated or Recursive query)</td>
+                <td>Stateless lookup; binary 12-byte header + variable RRs</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Card 3: Quantitative Formulas & Bounds -->
+      <div class="card">
+        <h2>📐 3. Quantitative Formulas & Delay Calculations</h2>
+        <h3>A. Non-Persistent vs. Persistent HTTP Delay</h3>
+        <div class="formula-box">
+          $$T_{	ext{HTTP 1.0}} = 2 	imes 	ext{RTT} + T_{	ext{transmit}}$$
+          $$	ext{For } M 	ext{ objects without pipelining: } T_{	ext{total}} = M 	imes (2 	imes 	ext{RTT} + T_{	ext{transmit}})$$
+          $$	ext{Persistent HTTP 1.1: } T_{	ext{total}} pprox 1 	imes 	ext{RTT} + \sum T_{	ext{transmit}} 	ext{ (after initial TCP handshake)}$$
+        </div>
+
+        <h3>B. File Distribution: Client-Server vs. P2P</h3>
+        <p>Distributing file size $F$ from one server (upload $u_s$) to $N$ peers (upload $u_i$, min download $d_{\min}$):</p>
+        <div class="formula-box">
+          $$D_{	ext{c-s}} \ge \max \left\{ rac{N \cdot F}{u_s}, \; rac{F}{d_{\min}} ight\} \quad \implies \mathcal{O}(N) 	ext{ (Grows linearly)}$$
+          $$D_{	ext{P2P}} \ge \max \left\{ rac{F}{u_s}, \; rac{F}{d_{\min}}, \; rac{N \cdot F}{u_s + \sum_{i=1}^N u_i} ight\} \quad \implies 	ext{Self-scalable}$$
+        </div>
+
+        <h3>C. Access Link Utilization & Caching Delay</h3>
+        <div class="formula-box">
+          $$U_{	ext{link}} = rac{	ext{Traffic Arrival Rate (bps)}}{	ext{Link Capacity } R} = rac{(1 - 	ext{HitRate}) 	imes \lambda_{	ext{req}} 	imes 	ext{Size}}{R}$$
+          $$	ext{End-End Delay} = (1 - h) \cdot D_{	ext{origin}} + h \cdot D_{	ext{cache}}$$
+        </div>
+      </div>
+
+      <!-- Card 4: Header Formats & DNS RR Schematics -->
+      <div class="card">
+        <h2>🧱 4. Header Structures & DNS Resource Records</h2>
+        <h3>DNS Resource Record (RR) Structure: <code>(name, value, type, ttl)</code></h3>
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>Type</th>
+                <th>Name Field</th>
+                <th>Value Field</th>
+                <th>Practical Internet Function</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>A</code></td>
+                <td>Hostname (e.g., <code>relay1.bar.foo.com</code>)</td>
+                <td>IPv4 Address (e.g., <code>145.37.93.126</code>)</td>
+                <td>Standard forward IP resolution</td>
+              </tr>
+              <tr>
+                <td><code>NS</code></td>
+                <td>Domain (e.g., <code>foo.com</code>)</td>
+                <td>Authoritative DNS server hostname</td>
+                <td>Delegation across DNS hierarchy</td>
+              </tr>
+              <tr>
+                <td><code>CNAME</code></td>
+                <td>Alias name (e.g., <code>www.ibm.com</code>)</td>
+                <td>Canonical real hostname</td>
+                <td>Host aliasing and CDN redirection</td>
+              </tr>
+              <tr>
+                <td><code>MX</code></td>
+                <td>Domain name (e.g., <code>foo.com</code>)</td>
+                <td>Mail server hostname (e.g., <code>mail.bar.foo.com</code>)</td>
+                <td>Directs inbound SMTP traffic to mail servers</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Card 5: Transport Requirements & Security -->
+      <div class="card">
+        <h2>🔒 5. Transport Protocols & Layer Boundaries</h2>
+        <ul>
+          <li><strong>TCP Service:</strong> Connection-oriented, 100% reliable byte stream, flow control (receiver buffer protection), congestion control (network overload throttling). <em>Does NOT guarantee timing, minimum throughput, or security</em>.</li>
+          <li><strong>UDP Service:</strong> Unreliable, connectionless, no flow/congestion control, minimal protocol overhead. Selected when timely delivery exceeds accuracy needs (DNS, real-time audio).</li>
+          <li><strong>TLS (Transport Layer Security):</strong> Implemented at the <strong>application layer</strong>. Apps link with TLS libraries that wrap cleartext into encrypted sockets before sending down to TCP.</li>
+        </ul>
+      </div>
+
+      <!-- Card 6: Evolution to Next-Gen Protocols (Full Width) -->
+      <div class="card full-width">
+        <h2>🚀 6. Next-Gen Transport: HTTP/1.1 vs HTTP/2 vs HTTP/3 (QUIC)</h2>
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>Dimension</th>
+                <th>HTTP/1.1</th>
+                <th>HTTP/2 (RFC 7540)</th>
+                <th>HTTP/3 (RFC 9114) over QUIC</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Transport Base</strong></td>
+                <td>TCP</td>
+                <td>Single shared TCP connection</td>
+                <td>UDP (with QUIC transport layer)</td>
+              </tr>
+              <tr>
+                <td><strong>Framing</strong></td>
+                <td>ASCII Text Lines</td>
+                <td>Binary Framing (Streams, Frames)</td>
+                <td>Binary Framing over QUIC streams</td>
+              </tr>
+              <tr>
+                <td><strong>Multiplexing</strong></td>
+                <td>Pipelining (prone to FCFS HOL blocking)</td>
+                <td>True multiplexing of multiple streams</td>
+                <td>True independent multiplexing per stream</td>
+              </tr>
+              <tr>
+                <td><strong>HOL Blocking</strong></td>
+                <td>Severe at Application Layer</td>
+                <td>Solved at App Layer; <em>Unsolved at TCP Layer</em></td>
+                <td><strong>Completely eliminated</strong> at all layers</td>
+              </tr>
+              <tr>
+                <td><strong>Security Setup</strong></td>
+                <td>Optional TLS layered over TCP (2+ RTT)</td>
+                <td>TLS 1.2+ layered over TCP (2-3 RTT)</td>
+                <td><strong>Integrated TLS 1.3</strong> (1-RTT or 0-RTT handshake)</td>
+              </tr>
+              <tr>
+                <td><strong>Connection Migration</strong></td>
+                <td>Tied to 4-tuple IP:Port (breaks on WiFi/5G switch)</td>
+                <td>Tied to TCP 4-tuple</td>
+                <td><strong>Connection ID (CID)</strong> enables seamless roaming</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================== -->
+  <!-- TAB 2: DETAILED COURSE SUMMARY -->
+  <!-- ========================================== -->
+  <section id="tab-summary" class="tab-content">
+    <div class="banner">
+      <h1>Exhaustive Course Syllabus Summary</h1>
+      <p>Comprehensive chapter-by-chapter walkthrough spanning theoretical principles, mathematical derivations, real-world protocols, caching mechanics, and video distribution architectures.</p>
+    </div>
+
+    <!-- Chapter 1 -->
+    <div class="card" style="margin-bottom: 20px;">
+      <h2>Chapter 1: Principles of Network Applications</h2>
+      <p>Network applications represent the foundational reason for the Internet's existence. Because application code executes exclusively on end systems, developers are unconstrained by core router configurations.</p>
+      
+      <h3>Architectural Paradigms</h3>
+      <ul>
+        <li><strong>Client-Server Model:</strong> Asymmetric design where a dedicated server maintains a fixed, well-known IP address and listens continuously for connections. Clients initiate contact on demand, typically hold dynamic IP addresses, and do not communicate directly with one another. Data centers scale this model to handle enterprise workloads.</li>
+        <li><strong>Peer-to-Peer (P2P) Model:</strong> Distributed, symmetric architecture where arbitrary end systems ("peers") communicate directly without central mediation. The fundamental advantage is <em>self-scalability</em>: every downloading peer simultaneously contributes upload bandwidth. The trade-off is management complexity stemming from <em>churn</em> (arbitrary node joins and leaves).</li>
+      </ul>
+
+      <h3>Process Communication & Sockets</h3>
+      <p>Within a single host, processes interact via Operating System IPC (Inter-Process Communication). Across network boundaries, processes exchange discrete messages through <strong>Sockets</strong>. A socket acts as an application-controlled door to the OS-managed transport protocol stack.</p>
+
+      <h3>Transport Requirements Spectrum</h3>
+      <ul>
+        <li><strong>Data Loss Tolerance:</strong> Web documents, financial transfers, and emails enforce zero loss (requiring reliable transport like TCP). Multimedia audio/video streaming and interactive voice/games tolerate bounded loss.</li>
+        <li><strong>Timing & Jitter:</strong> Interactive voice (VoIP) and real-time multiplayer gaming demand sub-100ms end-to-end latency to remain effective.</li>
+        <li><strong>Throughput:</strong> Video streaming mandates continuous minimum bandwidth (e.g., 500 Kbps - 15 Mbps), whereas email and file downloads are "elastic apps" adapting gracefully to available capacity.</li>
+      </ul>
+    </div>
+
+    <!-- Chapter 2 -->
+    <div class="card" style="margin-bottom: 20px;">
+      <h2>Chapter 2: The Web and HTTP</h2>
+      <p>HTTP is the lingua franca of the World Wide Web, designed as a stateless application-layer protocol operating on top of a reliable transport layer (TCP).</p>
+
+      <h3>Web Document Architecture</h3>
+      <p>A Web page consists of a base HTML document that contains textual structure alongside references to embedded objects (JPEG images, CSS sheets, JavaScript bundles, video files). Each object is globally addressable via a <strong>Uniform Resource Locator (URL)</strong>:</p>
+      <pre><code>http://www.example.com:80/path/to/myfile.html?key1=value1#section1
+|____|  |_____________||_||_______________| |__________| |______|
+Scheme     Domain     Port   Path to File    Query Params  Anchor</code></pre>
+
+      <h3>HTTP Connection Dynamics: Non-Persistent vs. Persistent</h3>
+      <ul>
+        <li><strong>HTTP/1.0 (Non-Persistent):</strong> Each TCP connection is closed immediately after a single object is transferred. To fetch a web page with 10 referenced images, 11 distinct TCP handshakes must execute sequentially (or via parallel TCP connections), consuming $2 	imes 	ext{RTT} + T_{	ext{transmit}}$ per object and placing heavy connection-state burdens on server OS kernels.</li>
+        <li><strong>HTTP/1.1 (Persistent):</strong> The TCP connection remains open after server response. Subsequent requests for referenced objects traverse the established pipe, dropping object download times to as little as $1 	imes 	ext{RTT}$. HTTP/1.1 also introduced pipelining, where clients send requests back-to-back without awaiting immediate responses.</li>
+      </ul>
+
+      <h3>HTTP Message Formats & Status Codes</h3>
+      <p>HTTP/1.1 messages are human-readable ASCII text terminated by <code>
+</code> (CRLF), with a blank line separating headers from the optional entity body.</p>
+      <ul>
+        <li><strong>200 OK:</strong> Request succeeded; requested object encapsulated in body.</li>
+        <li><strong>301 Moved Permanently:</strong> Object relocated; new URL specified in <code>Location:</code> header.</li>
+        <li><strong>304 Not Modified:</strong> Response to Conditional GET; instructs client to render local cache.</li>
+        <li><strong>400 Bad Request:</strong> Request message syntax not understood by server.</li>
+        <li><strong>404 Not Found:</strong> Requested document does not exist on origin host.</li>
+        <li><strong>505 HTTP Version Not Supported:</strong> Server cannot fulfill request with specified protocol version.</li>
+      </ul>
+
+      <h3>State Maintenance: Cookies</h3>
+      <p>Because HTTP servers are fundamentally stateless, stateful sessions (shopping carts, user authentication, tracking) rely on Cookies across four components:</p>
+      <ol>
+        <li><code>Set-Cookie: ID</code> header in the server's HTTP response.</li>
+        <li><code>Cookie: ID</code> header in subsequent HTTP requests from the browser.</li>
+        <li>A browser-managed cookie file stored on the user's host machine.</li>
+        <li>A backend database indexing session data by that unique ID.</li>
+      </ol>
+      <div class="callout callout-warning">
+        <strong>Privacy Implications:</strong> Third-party tracking cookies are injected by third-party advertising scripts (e.g., <code>AdX.com</code>) embedded across distinct publisher sites (e.g., <code>nytimes.com</code> and <code>socks.com</code>), reconstructing cross-site browsing history without explicit user visits to the tracker domain.
+      </div>
+
+      <h3>Web Caching & Proxy Servers: Worked Numerical Analysis</h3>
+      <p>A Web Cache (Proxy Server) intercepts client HTTP requests. If the requested object is fresh in local cache, it is served immediately; otherwise, the proxy fetches it from the origin server, stores a copy, and returns it to the client.</p>
+      <div class="callout callout-info">
+        <strong>Lecture Case Study:</strong>
+        <ul>
+          <li>Access link capacity: $R = 1.54	ext{ Mbps}$, LAN capacity: $1	ext{ Gbps}$.</li>
+          <li>Average object size: $S = 100	ext{ Kbits}$, Client request rate: $\lambda = 15	ext{ requests/sec}$.</li>
+          <li>Data arrival rate to access link: $\lambda 	imes S = 1.50	ext{ Mbps}$.</li>
+          <li>Baseline access link utilization: $U = rac{1.50}{1.54} pprox 97\%$. Queueing delay explodes into minutes!</li>
+          <li><strong>Option 1 (Hardware Upgrade):</strong> Upgrading link to $154	ext{ Mbps}$ drops utilization to $0.97\%$, bringing delay to $pprox 2.01	ext{ s}$, but costs immense recurring ISP fees.</li>
+          <li><strong>Option 2 (Install Local Web Cache with Hit Rate $h = 0.4$):</strong>
+            <ul>
+              <li>$40\%$ requests served locally in milliseconds.</li>
+              <li>Traffic across access link is reduced to: $(1 - 0.4) 	imes 1.50	ext{ Mbps} = 0.90	ext{ Mbps}$.</li>
+              <li>New link utilization: $U_{	ext{cache}} = rac{0.90}{1.54} pprox 58\%$, reducing queueing delay to negligible milliseconds.</li>
+              <li>Average End-to-End Delay:
+                $$	ext{Delay}_{	ext{avg}} = 0.6 	imes (2.01	ext{ s}) + 0.4 	imes (pprox 0.01	ext{ s}) pprox 1.2	ext{ seconds!}$$
+              </li>
+              <li><em>Verdict: Lower latency than a 154 Mbps connection at a tiny fraction of the infrastructure cost.</em></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+
+      <h3>Conditional GET</h3>
+      <p>To avoid serving stale content while saving bandwidth, clients issue a <strong>Conditional GET</strong> containing the header <code>If-modified-since: &lt;date&gt;</code>. If the origin server's file has not changed since that timestamp, it emits a lightweight <code>304 Not Modified</code> with no entity body, eliminating data transmission delay.</p>
+
+      <h3>HTTP/2 & HTTP/3 Architectural Breakthroughs</h3>
+      <ul>
+        <li><strong>HTTP/2:</strong> Replaces text parsing with a <strong>Binary Framing Layer</strong>. A single TCP connection carries multiple interleaved streams, solving Application-Layer Head-of-Line (HOL) blocking. It introduces stream prioritization, server push, and HPACK header compression. However, because all streams share a single TCP connection, a single lost packet at the transport layer forces TCP to stall all streams until retransmission succeeds (TCP HOL blocking).</li>
+        <li><strong>HTTP/3:</strong> Completely replaces TCP with <strong>QUIC</strong> over UDP. Each HTTP stream in QUIC has its own independent stream-level flow control and loss recovery. Packet loss in stream A has zero impact on streams B and C. QUIC integrates TLS 1.3 directly into its initial connection handshake (1-RTT or 0-RTT) and uses 64-bit Connection IDs rather than IP/port tuples, preventing dropped sessions when switching between Wi-Fi and 5G.</li>
+      </ul>
+    </div>
+
+    <!-- Chapter 3 -->
+    <div class="card" style="margin-bottom: 20px;">
+      <h2>Chapter 3: Electronic Mail Systems (SMTP, IMAP, POP3)</h2>
+      <p>Internet email is structured into three primary components: User Agents (UA / mail clients), Mail Servers, and Transfer Protocols.</p>
+
+      <h3>SMTP Architecture (RFC 5321)</h3>
+      <p>SMTP is a direct, connection-oriented <strong>client-push</strong> protocol running over TCP port 25. The sending server functions as the client, and the receiving server acts as the server.</p>
+      <ul>
+        <li><strong>Three Operational Phases:</strong>
+          <ol>
+            <li><strong>Handshaking:</strong> Greeting exchange (<code>HELO / EHLO</code>).</li>
+            <li><strong>Mail Transfer:</strong> Envelope declaration (<code>MAIL FROM:&lt;...&gt;</code>), recipient verification (<code>RCPT TO:&lt;...&gt;</code>), and body transfer (<code>DATA</code>).</li>
+            <li><strong>Closure:</strong> Termination sequence (<code>QUIT</code>).</li>
+          </ol>
+        </li>
+        <li><strong>Termination Token:</strong> The end of message data is signaled by a line with a solitary period: <code>
+.
+</code> (CRLF.CRLF).</li>
+        <li><strong>Encoding Restriction:</strong> SMTP was engineered strictly for 7-bit ASCII, necessitating MIME (Multipurpose Internet Mail Extensions) encoding for binary attachments and international scripts.</li>
+      </ul>
+
+      <h3>SMTP vs. HTTP Comparison</h3>
+      <ul>
+        <li><strong>Directionality:</strong> HTTP is primarily <em>client pull</em> (browser pulls data from server). SMTP is <em>client push</em> (sending server pushes mail to receiving server).</li>
+        <li><strong>Object Encapsulation:</strong> HTTP encapsulates exactly one object per response message. SMTP encapsulates all body components, texts, and attachments within a single multipart message.</li>
+        <li><strong>Commonalities:</strong> Both use ASCII commands, human-readable status codes, and persistent TCP connections.</li>
+      </ul>
+
+      <h3>Mail Access Protocols: IMAP vs. POP3 vs. HTTP</h3>
+      <p>A user cannot run an SMTP server on a home laptop to receive email directly because end-user machines are frequently powered off or assigned dynamic IPs. Incoming emails must pool in an always-on mail server mailbox, requiring an <em>Access Protocol</em> for retrieval:</p>
+      <ul>
+        <li><strong>POP3 (Post Office Protocol):</strong> Download-and-delete model. Simple authorization and retrieval where messages are stored locally on the client and deleted from server, preventing synchronized multi-device reading.</li>
+        <li><strong>IMAP (Internet Mail Access Protocol):</strong> State-centric server model. Keeps all messages permanently on the server across hierarchical folders. Tracks read, replied, and flagged statuses identically across multiple clients (smartphones, laptops, tablets).</li>
+        <li><strong>Webmail (HTTP/HTTPS):</strong> Modern providers (Gmail, Outlook 365) expose a rich web interface over HTTPS that talks internally to IMAP/SMTP server backends.</li>
+      </ul>
+    </div>
+
+    <!-- Chapter 4 -->
+    <div class="card" style="margin-bottom: 20px;">
+      <h2>Chapter 4: The Domain Name System (DNS)</h2>
+      <p>DNS is an application-layer directory protocol running primarily over UDP port 53. It translates human-friendly alphanumeric hostnames (e.g., <code>www.hku.hk</code>) into routable 32-bit IPv4 or 128-bit IPv6 addresses.</p>
+
+      <h3>Why Decentralization is Mandatory</h3>
+      <p>A single centralized DNS database would suffer catastrophic single-point-of-failure vulnerabilities, generate insurmountable global query volumes (e.g., Akamai handles &gt;2.2 Trillion DNS queries/day; Comcast handles &gt;600 Billion/day), impose intolerable geographic propagation delays, and make maintenance impossible. DNS scales via a <strong>hierarchical, distributed database</strong>.</p>
+
+      <h3>The DNS Server Hierarchy</h3>
+      <ol>
+        <li><strong>Root DNS Servers:</strong> Contact of last resort. 13 logical root nameservers worldwide, implemented across &gt;2000 physical server instances via Anycast routing, managed by ICANN.</li>
+        <li><strong>Top-Level Domain (TLD) Servers:</strong> Responsible for generic top-level domains (.com, .org, .net, .edu) and country-code top-level domains (.hk, .uk, .cn). Managed by designated registries (e.g., Verisign for .com/.net, Educause for .edu).</li>
+        <li><strong>Authoritative DNS Servers:</strong> Maintained by organizations or managed DNS providers. Houses the canonical hostname-to-IP mappings for an organization's public infrastructure.</li>
+        <li><strong>Local DNS Servers (Default Resolvers):</strong> Maintained by ISPs or public providers (e.g., Google 8.8.8.8, Cloudflare 1.1.1.1). Intercepts client queries, serves cached entries, or queries the global hierarchy on the client's behalf.</li>
+      </ol>
+
+      <h3>Resolution Mechanics: Iterated vs. Recursive</h3>
+      <ul>
+        <li><strong>Iterated Query:</strong> The contacted nameserver replies with the IP address of the next server down the chain ("I do not know the answer, but ask this server next"). The Local DNS Resolver bears the workload of issuing sequential queries down the hierarchy.</li>
+        <li><strong>Recursive Query:</strong> The contacted server assumes total responsibility for delivering the final answer, recursively querying subsequent servers itself. This imposes unsustainable memory and connection loads on upper-level Root and TLD servers and is generally disabled at the root level.</li>
+      </ul>
+
+      <h3>DNS Caching & TTL Dynamics</h3>
+      <p>Once a resolver learns a mapping, it stores the Resource Record in memory for the duration of its <strong>Time-to-Live (TTL)</strong>. Caching short-circuits lookups and bypasses root servers for the vast majority of traffic. However, cached records may become temporarily out-of-date if a host IP changes before TTL expiration (best-effort consistency).</p>
+
+      <h3>DNS Security Threats</h3>
+      <ul>
+        <li><strong>DDoS Attacks:</strong> Bombarding Root or TLD servers with volumetric UDP floods. Historically largely unsuccessful against Root servers due to Anycast filtering and local caching of TLD records.</li>
+        <li><strong>DNS Spoofing / Cache Poisoning:</strong> Forging UDP replies with bogus IP mappings before the authentic server responds, tricking the resolver into directing legitimate traffic to malicious servers.</li>
+        <li><strong>DNSSEC (RFC 4033):</strong> Cryptographic extensions providing digital signatures, public-key authentication, and data integrity verification for DNS responses.</li>
+      </ul>
+    </div>
+
+    <!-- Chapter 5 -->
+    <div class="card" style="margin-bottom: 20px;">
+      <h2>Chapter 5: Peer-to-Peer (P2P) File Distribution</h2>
+      <p>P2P shifts the burden of content distribution away from expensive server clusters directly onto the consuming clients.</p>
+
+      <h3>Mathematical Derivation: Client-Server vs. P2P File Distribution</h3>
+      <p>Consider distributing a single file of size $F$ bits to $N$ independent peers. The server possesses upload capacity $u_s$. Each peer $i$ has upload rate $u_i$ and download rate $d_i$, with minimum peer download rate $d_{\min} = \min \{d_i\}$.</p>
+      
+      <h4>Client-Server Lower Bound Derivation:</h4>
+      <ul>
+        <li>The server must replicate and upload the complete file $N$ times, requiring a server upload time of $rac{N \cdot F}{u_s}$.</li>
+        <li>The client with the slowest connection requires at least $rac{F}{d_{\min}}$ time to download its copy.</li>
+        <li>Therefore, distribution time satisfies:
+          $$D_{	ext{c-s}} \ge \max \left\{ rac{N \cdot F}{u_s}, \; rac{F}{d_{\min}} ight\}$$
+        </li>
+        <li>As $N$ grows large, $rac{N \cdot F}{u_s}$ dominates. The distribution time grows <strong>strictly linearly with $N$</strong> ($\mathcal{O}(N)$).</li>
+      </ul>
+
+      <h4>P2P Lower Bound Derivation:</h4>
+      <ul>
+        <li>The server must upload at least one original copy of the file into the swarm: $rac{F}{u_s}$.</li>
+        <li>The slowest peer must still download $F$ bits: $rac{F}{d_{\min}}$.</li>
+        <li>The swarm as an aggregate must download a total of $N \cdot F$ bits. The absolute maximum upload capacity across the entire ecosystem is the server's upload rate plus the sum of all peers' upload rates: $u_s + \sum_{i=1}^N u_i$.</li>
+        <li>Therefore, the P2P distribution time satisfies:
+          $$D_{	ext{P2P}} \ge \max \left\{ rac{F}{u_s}, \; rac{F}{d_{\min}}, \; rac{N \cdot F}{u_s + \sum_{i=1}^N u_i} ight\}$$
+        </li>
+        <li>If all peers upload at rate $u$, the third term becomes $rac{N \cdot F}{u_s + N \cdot u} = rac{F}{rac{u_s}{N} + u} pprox rac{F}{u}$ as $N 	o \infty$. The distribution time approaches an asymptote, demonstrating <strong>inherent self-scalability</strong>.</li>
+      </ul>
+
+      <h3>BitTorrent Swarm Architecture</h3>
+      <ul>
+        <li><strong>Chunks:</strong> Files are divided into uniform $256	ext{ KB}$ chunks.</li>
+        <li><strong>Swarm & Tracker:</strong> A torrent file contains file metadata and tracker addresses. The tracker coordinates peers joining the swarm.</li>
+        <li><strong>Rarest-First Selection:</strong> Peers query neighbors to discover chunk distribution and prioritize requesting the rarest chunks first. This maximizes replication speed across the swarm and prevents critical pieces from disappearing if early seeders drop offline.</li>
+        <li><strong>Tit-for-Tat Incentive Engine:</strong> Alice measures download rates from all neighbors and uploads exclusively to the top 4 peers sending her data fastest (the remaining peers are "choked"). Top 4 peers are recalculated every 10 seconds. Every 30 seconds, Alice randomly picks one additional peer to <em>"optimistically unchoke"</em>, allowing new peers without data to obtain their first chunk and discover higher-speed trading partners.</li>
+      </ul>
+    </div>
+
+    <!-- Chapter 6 -->
+    <div class="card" style="margin-bottom: 20px;">
+      <h2>Chapter 6: Video Streaming & Content Distribution Networks (CDNs)</h2>
+      <p>Video streaming represents over $80\%$ of all residential Internet traffic. Serving millions of concurrent streams requires addressing extreme scale and client link heterogeneity.</p>
+
+      <h3>Video Compression Basics</h3>
+      <p>Video is a sequence of bitmap frames displayed at fixed frequencies (e.g., 24–60 fps). Raw bitrates are unmanageable without compression:</p>
+      <ul>
+        <li><strong>Spatial Redundancy:</strong> Compresses redundancy within a single frame (e.g., replacing a sequence of identical purple sky pixels with a run-length representation: <code>(purple, N)</code>).</li>
+        <li><strong>Temporal Redundancy:</strong> Compresses redundancy between successive frames. Instead of transmitting frame $i+1$ in its entirety, the encoder transmits only the motion vectors and pixel difference matrix relative to frame $i$.</li>
+        <li><strong>CBR vs. VBR:</strong> Constant Bit Rate (fixed bit budget) vs. Variable Bit Rate (bit budget varies dynamically with visual scene complexity and motion).</li>
+      </ul>
+
+      <h3>Dynamic Adaptive Streaming over HTTP (DASH)</h3>
+      <p>DASH solves client diversity by turning streaming control over to the client:</p>
+      <ul>
+        <li><strong>Server Partitioning:</strong> The video file is chopped into small chunk files (e.g., 2–5 seconds of video). Each chunk is encoded into multiple bitrates/resolutions (e.g., 360p, 720p, 1080p, 4K) and cataloged in a <strong>Manifest File (MPD - Media Presentation Description)</strong> with matching URLs.</li>
+        <li><strong>Client Intelligence:</strong> The client repeatedly samples available server-to-client bandwidth and monitors its local buffer level. If bandwidth drops or the buffer depletes, the client requests a lower-bitrate chunk URL to avoid stalling. When network capacity recovers, it steps back up to higher quality.</li>
+        <li><strong>Playout Buffering:</strong> Compensates for network delay variance (jitter). Video rendering begins only after a safety threshold of video frames is buffered locally, decoupling playback timing from packet arrival timing.</li>
+      </ul>
+
+      <h3>CDN Topologies & Operation</h3>
+      <ul>
+        <li><strong>Enter Deep:</strong> Pushes CDN server clusters deep into local ISP access networks worldwide. Akamai operates &gt;240,000 servers in &gt;120 countries, minimizing latency and transit costs by keeping traffic hyper-local.</li>
+        <li><strong>Bring Home:</strong> Consolidates servers into fewer, massive server clusters situated at primary Internet Exchange Points (IXPs) near access networks (e.g., Limelight, Fastly).</li>
+        <li><strong>Netflix Infrastructure Model:</strong> Netflix hosts account registration, search, recommendation systems, and metadata billing in the Amazon AWS cloud. Video asset rendering and streaming are served from Netflix's custom, distributed Open Connect CDN appliances deployed directly inside partner ISP facilities.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ========================================== -->
+  <!-- TAB 3: COMPLETE Q&A BANK -->
+  <!-- ========================================== -->
+  <section id="tab-qa" class="tab-content">
+    <div class="banner">
+      <h1>Complete Slide Q&A Knowledge Bank</h1>
+      <p>Comprehensive master index of all explicit slide inquiries and foundational architectural comprehension questions from ICOM6012, categorized with slide citations and exam takeaways.</p>
+    </div>
+
+    <!-- QA 1 -->
+    <div class="qa-card">
+      <div class="qa-header">
+        <div class="qa-title">Q1: Should Big Tech companies help fund ISP network infrastructure costs?</div>
+        <div class="qa-badges">
+          <span class="badge badge-explicit">Explicit</span>
+          <span class="badge badge-source">Slides 2–3</span>
+        </div>
+      </div>
+      <div class="qa-answer">
+        Top content providers (Alphabet, Meta, Netflix, Apple, Amazon, Microsoft, Disney+, TikTok) generate over 50% of global internet traffic, with streaming video alone accounting for ~82%. ISPs argue that massive video payloads require immense capital expenditures to upgrade last-mile access links and transit links. Conversely, content providers argue that users already pay ISPs for internet connectivity and that high-quality tech platforms drive consumer broadband demand in the first place, warning that mandatory fees could violate net neutrality and undermine open market competition.
+      </div>
+      <div class="key-takeaway">
+        <strong>Key Takeaway:</strong> Highlights the economic tension between edge content generators driving massive asymmetric downlink traffic and network operators financing physical infrastructure.
+      </div>
+    </div>
+
+    <!-- QA 2 -->
+    <div class="qa-card">
+      <div class="qa-header">
+        <div class="qa-title">Q2: Why does developing applications on end systems enable rapid application development and deployment?</div>
+        <div class="qa-badges">
+          <span class="badge badge-explicit">Explicit</span>
+          <span class="badge badge-source">Slide 4</span>
+        </div>
+      </div>
+      <div class="qa-answer">
+        Network core devices (routers and link-layer switches) execute exclusively up to the network or data link layers; they do not process or understand application-layer protocols. Because edge systems are decoupled from core hardware, developers can write and distribute brand-new network applications instantly without requiring coordination with network operators, firmware updates on intermediate routers, or standardizing protocols within core infrastructure.
+      </div>
+      <div class="key-takeaway">
+        <strong>Key Takeaway:</strong> The End-to-End Principle of the Internet architecture preserves innovation at the edges by keeping network-core routers simple, dumb, and protocol-agnostic.
+      </div>
+    </div>
+
+    <!-- QA 3 -->
+    <div class="qa-card">
+      <div class="qa-header">
+        <div class="qa-title">Q3: Does the IP address of a host suffice for identifying an application process?</div>
+        <div class="qa-badges">
+          <span class="badge badge-explicit">Explicit</span>
+          <span class="badge badge-source">Slide 10</span>
+        </div>
+      </div>
+      <div class="qa-answer">
+        No. A single computer host operates many concurrent network processes (e.g., an Apache Web server, an SSH daemon, a mail server, and multiple browser tabs). The 32-bit IP address identifies only the network interface card on the host machine. To deliver messages to a specific application process, the operating system requires an identifier consisting of both the <strong>IP address and a 16-bit Port Number</strong> (e.g., <code>147.8.2.58:443</code>).
+      </div>
+      <div class="key-takeaway">
+        <strong>Key Takeaway:</strong> Demultiplexing to the application layer strictly mandates an <code>&lt;IP, Port&gt;</code> identifier tuple.
+      </div>
+    </div>
+
+    <!-- QA 4 -->
+    <div class="qa-card">
+      <div class="qa-header">
+        <div class="qa-title">Q4: Why does UDP exist when TCP provides full reliability, flow control, and congestion control?</div>
+        <div class="qa-badges">
+          <span class="badge badge-explicit">Explicit</span>
+          <span class="badge badge-source">Slide 14</span>
+        </div>
+      </div>
+      <div class="qa-answer">
+        TCP's guarantees introduce substantial overheads that degrade certain application types:
+        <ol>
+          <li><strong>Connection Setup Delay:</strong> TCP enforces a 3-way handshake (1 RTT overhead) before transmitting payload data, whereas UDP sends immediately.</li>
+          <li><strong>No Head-of-Line Blocking:</strong> If a TCP segment is lost, retransmissions stall all subsequent data until the hole is filled. UDP delivers packets independently as they arrive, ideal for real-time voice and gaming.</li>
+          <li><strong>No Congestion Throttling:</strong> TCP reduces sending rate under congestion. Real-time media feeds prefer dropping frames over buffering indefinitely.</li>
+          <li><strong>Small Header Overhead:</strong> UDP uses an 8-byte header versus TCP's minimum 20-byte header.</li>
+        </ol>
+      </div>
+      <div class="key-takeaway">
+        <strong>Key Takeaway:</strong> UDP is favored whenever transmission speed, zero setup latency, fine-grained control, or resilience to head-of-line blocking outweighs 100% data reliability.
+      </div>
+    </div>
+
+    <!-- QA 5 -->
+    <div class="qa-card">
+      <div class="qa-header">
+        <div class="qa-title">Q5: Why is maintaining "state" on protocol servers complex and problematic?</div>
+        <div class="qa-badges">
+          <span class="badge badge-inferred">Inferred Core</span>
+          <span class="badge badge-source">Slide 23</span>
+        </div>
+      </div>
+      <div class="qa-answer">
+        Stateless protocols (like base HTTP) require zero memory retention of prior client transactions. When a protocol maintains server-side state, history must be retained across crashes, timeouts, and network failures. If either the server or client experiences a reboot, partition, or crash, their respective views of state diverge and can fall out of synchronization. Reconciling inconsistent distributed states requires complex recovery logic, locking schemes, and database transactions.
+      </div>
+      <div class="key-takeaway">
+        <strong>Key Takeaway:</strong> Stateless design simplifies server architecture, maximizes horizontal scaling, and ensures resilient failure recovery.
+      </div>
+    </div>
+
+    <!-- QA 6 -->
+    <div class="qa-card">
+      <div class="qa-header">
+        <div class="qa-title">Q6: How does a Web browser decide which header lines to include in an HTTP request message?</div>
+        <div class="qa-badges">
+          <span class="badge badge-explicit">Explicit</span>
+          <span class="badge badge-source">Slide 31</span>
+        </div>
+      </div>
+      <div class="qa-answer">
+        A browser constructs headers based on:
+        <ul>
+          <li><strong>Browser Specifications & Capabilities:</strong> <code>User-Agent</code> communicates OS and browser rendering versions; <code>Accept-Encoding</code> signals supported compression (gzip, brotli).</li>
+          <li><strong>User Configuration & Locale:</strong> <code>Accept-Language</code> reflects the user's localized operating system language settings (e.g., <code>en-US</code>).</li>
+          <li><strong>Protocol Standards:</strong> HTTP/1.1 requires the <code>Host:</code> header to enable virtual hosting on shared server IPs; <code>Connection: keep-alive</code> requests persistent sockets.</li>
+          <li><strong>Stored Browser State:</strong> If a cookie matches the domain path, the browser automatically appends the <code>Cookie:</code> header. If a cached version exists, it injects <code>If-Modified-Since:</code> for conditional validation.</li>
+        </ul>
+      </div>
+      <div class="key-takeaway">
+        <strong>Key Takeaway:</strong> HTTP request headers dynamically synthesize client capabilities, protocol requirements, localized environment settings, and cached state.
+      </div>
+    </div>
+
+    <!-- QA 7 -->
+    <div class="qa-card">
+      <div class="qa-header">
+        <div class="qa-title">Q7: Why doesn't a sender's User Agent deliver email directly to the recipient's mail server via SMTP?</div>
+        <div class="qa-badges">
+          <span class="badge badge-explicit">Explicit</span>
+          <span class="badge badge-source">Slide 67</span>
+        </div>
+      </div>
+      <div class="qa-answer">
+        Direct delivery from sender UA to receiver mail server is unreliable because:
+        <ol>
+          <li>If the destination mail server is temporarily unreachable, under maintenance, or congested, the sender's client would be forced to maintain a persistent retry queue, preventing the user from going offline.</li>
+          <li>Instead, the sender's UA hands off the message to its local mail server via SMTP. The sender's mail server maintains a robust persistent message queue, executing scheduled retries (e.g., every 30 minutes for days) until successfully delivering the email to the recipient's mail server.</li>
+        </ol>
+      </div>
+      <div class="key-takeaway">
+        <strong>Key Takeaway:</strong> Intermediate mail servers provide store-and-forward decoupling, guaranteeing persistent message queuing and delivery retry logic.
+      </div>
+    </div>
+
+    <!-- QA 8 -->
+    <div class="qa-card">
+      <div class="qa-header">
+        <div class="qa-title">Q8: Can an email sender track if you have opened or read their email message?</div>
+        <div class="qa-badges">
+          <span class="badge badge-explicit">Explicit</span>
+          <span class="badge badge-source">Slide 67</span>
+        </div>
+      </div>
+      <div class="qa-answer">
+        Yes. Senders achieve email tracking by embedding an invisible $1 	imes 1$ transparent image ("tracking pixel") inside HTML emails with a unique query URL parameter (e.g., <code>&lt;img src="https://tracker.com/pixel.gif?user_id=12345"&gt;</code>). When the recipient opens the email, their mail client automatically issues an HTTP GET request to fetch the image. The tracking server logs this request along with timestamp, IP address, device user-agent, and user identity.
+      </div>
+      <div class="key-takeaway">
+        <strong>Key Takeaway:</strong> Email open tracking exploits HTML image rendering over HTTP; modern mail clients mitigate this by proxying or blocking external images by default.
+      </div>
+    </div>
+
+    <!-- QA 9 -->
+    <div class="qa-card">
+      <div class="qa-header">
+        <div class="qa-title">Q9: Why can't the Internet function with a single, centralized DNS server?</div>
+        <div class="qa-badges">
+          <span class="badge badge-explicit">Explicit</span>
+          <span class="badge badge-source">Slide 70</span>
+        </div>
+      </div>
+      <div class="qa-answer">
+        A centralized DNS architecture fails on all scalability metrics:
+        <ul>
+          <li><strong>Single Point of Failure:</strong> If the central database crashes, the entire global Internet ceases to function.</li>
+          <li><strong>Traffic Volume:</strong> Global DNS query loads exceed trillions of queries per day (Akamai alone processes &gt;2.2T queries/day). No single server cluster can sustain this packet arrival rate.</li>
+          <li><strong>Geographic Propagation Delay:</strong> Queries sent across continents incur massive physical propagation latency.</li>
+          <li><strong>Maintenance & Scale:</strong> Centralized record storage for billions of connected devices would be unmaintainable and subject to update bottlenecks.</li>
+        </ul>
+      </div>
+      <div class="key-takeaway">
+        <strong>Key Takeaway:</strong> DNS scales by partitioning namespace authority across a globally distributed, cached, hierarchical tree.
+      </div>
+    </div>
+
+    <!-- QA 10 -->
+    <div class="qa-card">
+      <div class="qa-header">
+        <div class="qa-title">Q10: What is Dynamic DNS (DDNS) and what operational challenge does it resolve?</div>
+        <div class="qa-badges">
+          <span class="badge badge-explicit">Explicit</span>
+          <span class="badge badge-source">Slide 84</span>
+        </div>
+      </div>
+      <div class="qa-answer">
+        Traditional DNS assumes that hosts running public services hold static, permanent IP addresses. However, residential ISPs dynamically assign temporary IP addresses to homes and small businesses via DHCP that change periodically. Dynamic DNS (DDNS) solves this by running a client software daemon on the local router or server. Whenever the ISP assigns a new public IP, the DDNS client immediately issues an authenticated update to the authoritative DDNS server, modifying the <code>Type A</code> record in real time with an extremely low TTL.
+      </div>
+      <div class="key-takeaway">
+        <strong>Key Takeaway:</strong> DDNS enables hosting services on networks with dynamic IP allocations by automating real-time DNS record updates.
+      </div>
+    </div>
+
+    <!-- QA 11 -->
+    <div class="qa-card">
+      <div class="qa-header">
+        <div class="qa-title">Q11: Why does BitTorrent use "Rarest First" chunk selection and "Tit-for-Tat" choking?</div>
+        <div class="qa-badges">
+          <span class="badge badge-inferred">Inferred Core</span>
+          <span class="badge badge-source">Slides 94–95</span>
+        </div>
+      </div>
+      <div class="qa-answer">
+        Both algorithms solve fundamental P2P game-theoretic and distribution challenges:
+        <ul>
+          <li><strong>Rarest First:</strong> Prevents swarm bottlenecking. By replicating the least-common chunks across peers first, the swarm ensures that all pieces remain available even if the original seeder leaves. It also equalizes chunk diversity across peers.</li>
+          <li><strong>Tit-for-Tat:</strong> Prevents free-riding ("leeching"). Peers reward contributors by uploading only to the top 4 peers providing the fastest download rates. Optimistic unchoking every 30 seconds ensures new peers without chunks can bootstrap into the swarm and discover higher bandwidth peers.</li>
+        </ul>
+      </div>
+      <div class="key-takeaway">
+        <strong>Key Takeaway:</strong> Rarest First guarantees piece survival; Tit-for-Tat aligns individual self-interest with collective swarm performance.
+      </div>
+    </div>
+
+    <!-- QA 12 -->
+    <div class="qa-card">
+      <div class="qa-header">
+        <div class="qa-title">Q12: In DASH, why is adaptation intelligence placed in the client rather than the streaming server?</div>
+        <div class="qa-badges">
+          <span class="badge badge-explicit">Explicit</span>
+          <span class="badge badge-source">Slides 105–106</span>
+        </div>
+      </div>
+      <div class="qa-answer">
+        Shifting adaptation logic to the client maximizes server scalability and optimization:
+        <ul>
+          <li><strong>Server Simplicity & Statelessness:</strong> Servers remain simple HTTP web servers serving static chunks. They do not track individual client playback buffers, decoding speeds, or instantaneous wireless link changes.</li>
+          <li><strong>Accurate Local Context:</strong> The client device is uniquely positioned to measure its own real-time metrics: current screen resolution, battery state, CPU decoding capability, and precise playout buffer occupancy.</li>
+          <li><strong>Server Switching:</strong> The client can seamlessly switch to fetch subsequent chunks from alternate CDN cache nodes if an origin link becomes congested.</li>
+        </ul>
+      </div>
+      <div class="key-takeaway">
+        <strong>Key Takeaway:</strong> Client-driven DASH preserves server statelessness and places rate adaptation control where buffer and link state are known with highest accuracy.
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+  function switchTab(tabId) {
+    // Hide all tab contents
+    const contents = document.querySelectorAll('.tab-content');
+    contents.forEach(content => content.classList.remove('active'));
+
+    // Remove active class from buttons
+    const buttons = document.querySelectorAll('.tab-btn');
+    buttons.forEach(btn => btn.classList.remove('active'));
+
+    // Show selected tab content
+    const targetContent = document.getElementById(tabId);
+    if (targetContent) {
+      targetContent.classList.add('active');
+    }
+
+    // Activate corresponding button
+    const activeBtn = Array.from(buttons).find(btn => btn.getAttribute('onclick').includes(tabId));
+    if (activeBtn) {
+      activeBtn.classList.add('active');
+    }
+
+    // Scroll to top smoothly
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+
+</body>
+</html>
